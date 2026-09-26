@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications | Campus Care</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#040d17;
+    --cyan:#37f0d8;
+    --blue:#2f8fe0;
+    --line:rgba(80,200,220,.22);
+    --muted:#8fa6b8;
+    --panel:linear-gradient(160deg, rgba(11,32,48,.9), rgba(6,18,30,.9));
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:
+      radial-gradient(ellipse at 10% 10%, rgba(30,120,140,.18), transparent 45%),
+      radial-gradient(ellipse at 90% 80%, rgba(30,90,180,.15), transparent 50%),
+      var(--bg-deep);
+    font-family:'Poppins',sans-serif;
+    color:#eaf6f9;
+    min-height:100vh;
+  }
+  a{color:inherit;}
+ 
+  /* ===== Sidebar ===== */
+  .sidebar{
+    width:250px;min-height:100vh;
+    border-right:1px solid var(--line);
+    background:rgba(4,13,23,.6);
+    padding:1.4rem 1.1rem;
+    position:fixed;top:0;left:0;bottom:0;
+    display:flex;flex-direction:column;
+  }
+  .brand-mark{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#031018;overflow:hidden;flex-shrink:0;}
+  .brand-text{font-weight:700;font-size:1.1rem;}
+  .brand-text .care{color:var(--cyan);}
+  .nav-link-custom{
+    display:flex;align-items:center;gap:.7rem;
+    color:var(--muted);font-size:.92rem;font-weight:500;
+    padding:.65rem .85rem;border-radius:10px;margin-bottom:.25rem;
+    text-decoration:none;transition:.15s;
+  }
+  .nav-link-custom i{font-size:1.05rem;width:20px;text-align:center;}
+  .nav-link-custom:hover{background:rgba(255,255,255,.04);color:#eaf6f9;}
+  .nav-link-custom.active{
+    background:linear-gradient(90deg, rgba(55,240,216,.16), rgba(47,143,224,.10));
+    color:#eaf6f9;border:1px solid rgba(55,240,216,.35);
+  }
+  .nav-badge{margin-left:auto;background:#ff4d6d;color:#fff;font-size:.68rem;font-weight:700;padding:.1rem .45rem;border-radius:20px;}
+  .sidebar-promo{
+    margin-top:auto;border:1px solid var(--line);border-radius:14px;padding:1.1rem;
+    background:rgba(255,255,255,.02);
+  }
+  .sidebar-promo .promo-icon{
+    width:40px;height:40px;border-radius:10px;background:rgba(55,240,216,.12);
+    display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:1.1rem;margin-bottom:.7rem;
+  }
+  .sidebar-promo h6{font-weight:700;font-size:.92rem;margin-bottom:.4rem;line-height:1.3;}
+  .sidebar-promo p{color:var(--muted);font-size:.78rem;margin-bottom:0;line-height:1.4;}
+ 
+  /* ===== Main ===== */
+  .main-wrap{margin-left:250px;min-height:100vh;}
+  .topbar{
+    border-bottom:1px solid var(--line);
+    background:rgba(4,13,23,.55);
+    padding:.9rem 1.6rem;
+    display:flex;align-items:center;gap:1rem;
+  }
+  .icon-btn{
+    width:38px;height:38px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);border:1px solid transparent;background:transparent;
+    text-decoration:none;
+  }
+  .icon-btn:hover{border-color:var(--line);color:var(--cyan);}
+  .back-link{display:flex;align-items:center;gap:.5rem;color:var(--muted);text-decoration:none;font-size:.88rem;}
+  .back-link:hover{color:var(--cyan);}
+ 
+  .content{padding:1.8rem 1.6rem 3rem;}
+  .page-title{font-weight:800;font-size:1.7rem;margin-bottom:.15rem;}
+  .page-title .accent{color:var(--cyan);}
+  .page-sub{color:var(--muted);font-size:.92rem;margin-bottom:1.6rem;}
+ 
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;}
+ 
+  /* ===== Toolbar ===== */
+  .filter-tabs{display:flex;gap:.3rem;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:3px;flex-wrap:wrap;}
+  .filter-tabs button{border:none;background:transparent;color:var(--muted);font-size:.8rem;font-weight:600;padding:.4rem .8rem;border-radius:7px;white-space:nowrap;display:flex;align-items:center;gap:.4rem;}
+  .filter-tabs button.active{background:var(--cyan);color:#03181a;}
+  .filter-tabs .count{
+    background:rgba(255,255,255,.08);color:inherit;
+    font-size:.68rem;font-weight:700;padding:0 .4rem;border-radius:10px;
+    min-width:16px;text-align:center;
+  }
+  .filter-tabs button.active .count{background:rgba(3,24,26,.25);}
+ 
+  .mark-all-link{
+    font-size:.83rem;color:var(--cyan);text-decoration:none;
+    display:flex;align-items:center;gap:.4rem;
+  }
+  .mark-all-link:hover{text-decoration:underline;}
+ 
+  /* ===== Notification item ===== */
+  .notif-item{
+    display:flex;gap:.9rem;
+    padding:1rem 1.2rem;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    position:relative;
+    transition:.15s;
+  }
+  .notif-item:last-child{border-bottom:none;}
+  .notif-item:hover{background:rgba(255,255,255,.02);}
+  .notif-item.unread{background:rgba(55,240,216,.03);}
+  .notif-item.unread::before{
+    content:"";
+    position:absolute;left:0;top:0;bottom:0;
+    width:3px;background:var(--cyan);
+  }
+  .notif-icon{
+    width:40px;height:40px;border-radius:11px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-size:1.05rem;
+  }
+  .notif-icon.red{background:rgba(255,77,109,.15);color:#ff7893;}
+  .notif-icon.green{background:rgba(55,240,138,.15);color:#37f08a;}
+  .notif-icon.blue{background:rgba(47,143,224,.15);color:#5eb3ff;}
+  .notif-icon.amber{background:rgba(240,180,55,.15);color:#f0b437;}
+  .notif-icon.purple{background:rgba(150,110,240,.15);color:#a78bfa;}
+  .notif-title{font-size:.9rem;font-weight:600;}
+  .notif-title .dot-new{width:7px;height:7px;border-radius:50%;background:var(--cyan);display:inline-block;margin-left:.4rem;vertical-align:middle;}
+  .notif-sub{font-size:.8rem;color:var(--muted);margin-top:.1rem;}
+  .notif-time{font-size:.74rem;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+  .notif-actions{
+    display:flex;gap:.4rem;
+    opacity:0;transition:.15s;
+    flex-shrink:0;
+  }
+  .notif-item:hover .notif-actions{opacity:1;}
+  .notif-action-btn{
+    width:28px;height:28px;border-radius:7px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);border:1px solid var(--line);
+    background:transparent;font-size:.78rem;
+  }
+  .notif-action-btn:hover{color:var(--cyan);border-color:var(--cyan);}
+ 
+  .empty-state{text-align:center;padding:3rem 1rem;color:var(--muted);}
+  .empty-state i{font-size:2.2rem;color:var(--cyan);opacity:.6;margin-bottom:.8rem;display:block;}
+ 
+  /* ===== Responsive ===== */
+  @media (max-width: 991.98px){
+    .sidebar{transform:translateX(-100%);transition:.25s ease;z-index:1050;box-shadow:0 0 40px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+    .main-wrap{margin-left:0;}
+    .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1040;}
+    .sidebar-backdrop.show{display:block;}
+    .menu-toggle{display:flex !important;}
+  }
+  .menu-toggle{display:none;}
+ 
+  @media (max-width: 767.98px){
+    .content{padding:1.4rem 1rem 2.5rem;}
+    .page-title{font-size:1.4rem;}
+    .notif-actions{display:none;}
+    .notif-item{padding:.9rem;}
+  }
+</style>
+</head>
+<body>
+ 
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+ 
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="d-flex align-items-center gap-2 mb-4 px-1">
+    <div class="brand-mark"><i class="bi bi-shield-fill-check"></i></div>
+    <span class="brand-text">Campus <span class="care">Care</span></span>
+  </div>
+ 
+  <nav class="flex-grow-1">
+    <a href="/dashboard" class="nav-link-custom">
+    <i class="bi bi-grid-1x2-fill"></i> Dashboard
+</a>
+
+<a href="/report-issue" class="nav-link-custom">
+    <i class="bi bi-plus-circle"></i> Report Issue
+</a>
+
+<a href="/Myreports.html" class="nav-link-custom">
+    <i class="bi bi-file-earmark-text"></i> My Reports
+</a>
+
+<a href="/track.html" class="nav-link-custom">
+    <i class="bi bi-broadcast"></i> Track Status
+</a>
+
+<a href="/analytics.html" class="nav-link-custom">
+    <i class="bi bi-bar-chart-line"></i> Analytics
+</a>
+
+<a href="/notifications" class="nav-link-custom active">
+    <i class="bi bi-bell"></i> Notifications
+    <span class="nav-badge" id="sidebarBadge">3</span>
+</a>
+    <a href="#" class="nav-link-custom"><i class="bi bi-gear"></i> Settings</a>
+  </nav>
+ 
+  <div class="sidebar-promo">
+    <div class="promo-icon"><i class="bi bi-mortarboard-fill"></i></div>
+    <h6>Better Campus<br>Better Tomorrow</h6>
+    <p>Together we build a safer, cleaner and smarter campus.</p>
+  </div>
+</aside>
+ 
+<!-- MAIN -->
+<div class="main-wrap">
+ 
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <button class="icon-btn menu-toggle" id="menuToggle"><i class="bi bi-list fs-4"></i></button>
+    <a href="/dashboard" class="back-link">
+    <i class="bi bi-arrow-left"></i> Back to Dashboard
+</a>
+  </div>
+ 
+  <!-- CONTENT -->
+  <div class="content">
+ 
+    <h1 class="page-title">Notifications <span class="accent" id="unreadCountTitle"></span></h1>
+    <p class="page-sub">Stay on top of updates for issues you're tracking.</p>
+ 
+    <!-- TOOLBAR -->
+    <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between mb-3">
+      <div class="filter-tabs" id="filterTabs">
+        <button class="active" data-filter="all">All <span class="count" id="countAll">0</span></button>
+        <button data-filter="unread">Unread <span class="count" id="countUnread">0</span></button>
+      </div>
+      <a href="#" class="mark-all-link" id="markAllLink"><i class="bi bi-check2-all"></i> Mark all as read</a>
+    </div>
+ 
+    <!-- NOTIFICATIONS LIST -->
+    <div class="panel" id="notifPanel">
+      <div id="notifList"></div>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <i class="bi bi-bell-slash"></i>
+        <p class="mb-0">No notifications here.</p>
+      </div>
+    </div>
+ 
+  </div>
+</div>
+ 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Mobile sidebar toggle
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    sidebar.classList.add('open');
+    backdrop.classList.add('show');
+  });
+  backdrop.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('show');
+  });
+ 
+  // ---- Sample notifications (swap for a real API response) ----
+  let NOTIFICATIONS = [
+    { id:1, icon:'bi-file-earmark-text', color:'red',    title:'New issue reported',      sub:'Water leakage &ndash; Block C',        time:'10 min ago', unread:true },
+    { id:2, icon:'bi-check-lg',          color:'green',  title:'Issue resolved',           sub:'Broken bench &ndash; Library',         time:'1 hr ago',   unread:true },
+    { id:3, icon:'bi-arrow-repeat',      color:'purple', title:'Status updated to In Progress', sub:'Power outage &ndash; Hostel Room 214', time:'3 hr ago',   unread:true },
+    { id:4, icon:'bi-hourglass-split',   color:'amber',  title:'Reminder: issue pending review', sub:'Cleaning request &ndash; Canteen',     time:'Yesterday',  unread:false },
+    { id:5, icon:'bi-file-earmark-text', color:'blue',   title:'New issue reported',       sub:'Power issue &ndash; Hostel',           time:'Yesterday',  unread:false },
+    { id:6, icon:'bi-megaphone',         color:'purple', title:'Campus-wide announcement', sub:'Water supply maintenance on Sep 15, 9&ndash;11 AM', time:'2 days ago', unread:false },
+    { id:7, icon:'bi-check-lg',          color:'green',  title:'Issue resolved',           sub:'WiFi down &ndash; Block A',            time:'4 days ago', unread:false }
+  ];
+ 
+  let activeFilter = 'all';
+ 
+  function getFiltered(){
+    return activeFilter === 'unread' ? NOTIFICATIONS.filter(n => n.unread) : NOTIFICATIONS;
+  }
+ 
+  function updateCounts(){
+    const unreadCount = NOTIFICATIONS.filter(n => n.unread).length;
+    document.getElementById('countAll').textContent = NOTIFICATIONS.length;
+    document.getElementById('countUnread').textContent = unreadCount;
+    document.getElementById('unreadCountTitle').textContent = unreadCount ? `(${unreadCount} new)` : '';
+ 
+    // keep sidebar + topbar bell badges in sync
+    const sidebarBadge = document.getElementById('sidebarBadge');
+    if(unreadCount > 0){
+      sidebarBadge.style.display = 'inline-block';
+      sidebarBadge.textContent = unreadCount;
+    } else {
+      sidebarBadge.style.display = 'none';
+    }
+  }
+ 
+  function render(){
+    const data = getFiltered();
+    const list = document.getElementById('notifList');
+    list.innerHTML = '';
+    document.getElementById('emptyState').style.display = data.length ? 'none' : 'block';
+ 
+    data.forEach(n => {
+      list.insertAdjacentHTML('beforeend', `
+        <div class="notif-item ${n.unread ? 'unread' : ''}" data-id="${n.id}">
+          <div class="notif-icon ${n.color}"><i class="bi ${n.icon}"></i></div>
+          <div class="flex-grow-1">
+            <div class="notif-title">${n.title}${n.unread ? '<span class="dot-new"></span>' : ''}</div>
+            <div class="notif-sub">${n.sub}</div>
+          </div>
+          <div class="notif-time">${n.time}</div>
+          <div class="notif-actions">
+            ${n.unread ? `<button class="notif-action-btn mark-read-btn" title="Mark as read"><i class="bi bi-check2"></i></button>` : ''}
+            <button class="notif-action-btn delete-btn" title="Remove"><i class="bi bi-trash"></i></button>
+          </div>
+        </div>
+      `);
+    });
+ 
+    // Wire per-item actions
+    list.querySelectorAll('.mark-read-btn').forEach(btn => {
+      btn.addEventListener('click', function(){
+        const id = Number(this.closest('.notif-item').dataset.id);
+        const n = NOTIFICATIONS.find(x => x.id === id);
+        if(n) n.unread = false;
+        updateCounts();
+        render();
+      });
+    });
+    list.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', function(){
+        const id = Number(this.closest('.notif-item').dataset.id);
+        NOTIFICATIONS = NOTIFICATIONS.filter(x => x.id !== id);
+        updateCounts();
+        render();
+      });
+    });
+  }
+ 
+  document.querySelectorAll('#filterTabs button').forEach(btn => {
+    btn.addEventListener('click', function(){
+      document.querySelector('#filterTabs button.active').classList.remove('active');
+      this.classList.add('active');
+      activeFilter = this.dataset.filter;
+      render();
+    });
+  });
+ 
+  document.getElementById('markAllLink').addEventListener('click', function(e){
+    e.preventDefault();
+    NOTIFICATIONS.forEach(n => n.unread = false);
+    updateCounts();
+    render();
+  });
+ 
+  updateCounts();
+  render();
+</script>
+</body>
+</html>

@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Status | Campus Care</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#040d17;
+    --cyan:#37f0d8;
+    --blue:#2f8fe0;
+    --line:rgba(80,200,220,.22);
+    --muted:#8fa6b8;
+    --panel:linear-gradient(160deg, rgba(11,32,48,.9), rgba(6,18,30,.9));
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:
+      radial-gradient(ellipse at 10% 10%, rgba(30,120,140,.18), transparent 45%),
+      radial-gradient(ellipse at 90% 80%, rgba(30,90,180,.15), transparent 50%),
+      var(--bg-deep);
+    font-family:'Poppins',sans-serif;
+    color:#eaf6f9;
+    min-height:100vh;
+  }
+  a{color:inherit;}
+ 
+  /* ===== Sidebar ===== */
+  .sidebar{
+    width:250px;min-height:100vh;
+    border-right:1px solid var(--line);
+    background:rgba(4,13,23,.6);
+    padding:1.4rem 1.1rem;
+    position:fixed;top:0;left:0;bottom:0;
+    display:flex;flex-direction:column;
+  }
+  .brand-mark{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#031018;overflow:hidden;flex-shrink:0;}
+  .brand-text{font-weight:700;font-size:1.1rem;}
+  .brand-text .care{color:var(--cyan);}
+  .nav-link-custom{
+    display:flex;align-items:center;gap:.7rem;
+    color:var(--muted);font-size:.92rem;font-weight:500;
+    padding:.65rem .85rem;border-radius:10px;margin-bottom:.25rem;
+    text-decoration:none;transition:.15s;
+  }
+  .nav-link-custom i{font-size:1.05rem;width:20px;text-align:center;}
+  .nav-link-custom:hover{background:rgba(255,255,255,.04);color:#eaf6f9;}
+  .nav-link-custom.active{
+    background:linear-gradient(90deg, rgba(55,240,216,.16), rgba(47,143,224,.10));
+    color:#eaf6f9;border:1px solid rgba(55,240,216,.35);
+  }
+  .nav-badge{margin-left:auto;background:#ff4d6d;color:#fff;font-size:.68rem;font-weight:700;padding:.1rem .45rem;border-radius:20px;}
+  .sidebar-promo{
+    margin-top:auto;border:1px solid var(--line);border-radius:14px;padding:1.1rem;
+    background:rgba(255,255,255,.02);
+  }
+  .sidebar-promo .promo-icon{
+    width:40px;height:40px;border-radius:10px;background:rgba(55,240,216,.12);
+    display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:1.1rem;margin-bottom:.7rem;
+  }
+  .sidebar-promo h6{font-weight:700;font-size:.92rem;margin-bottom:.4rem;line-height:1.3;}
+  .sidebar-promo p{color:var(--muted);font-size:.78rem;margin-bottom:0;line-height:1.4;}
+ 
+  /* ===== Main ===== */
+  .main-wrap{margin-left:250px;min-height:100vh;}
+  .topbar{
+    border-bottom:1px solid var(--line);
+    background:rgba(4,13,23,.55);
+    padding:.9rem 1.6rem;
+    display:flex;align-items:center;gap:1rem;
+  }
+  .icon-btn{
+    width:38px;height:38px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);border:1px solid transparent;background:transparent;
+  }
+  .icon-btn:hover{border-color:var(--line);color:var(--cyan);}
+  .back-link{display:flex;align-items:center;gap:.5rem;color:var(--muted);text-decoration:none;font-size:.88rem;}
+  .back-link:hover{color:var(--cyan);}
+ 
+  .content{padding:1.8rem 1.6rem 3rem;}
+  .page-title{font-weight:800;font-size:1.7rem;margin-bottom:.15rem;}
+  .page-title .accent{color:var(--cyan);}
+  .page-sub{color:var(--muted);font-size:.92rem;margin-bottom:1.6rem;}
+ 
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;}
+ 
+  /* ===== Search by ticket ===== */
+  .search-box{
+    flex:1;max-width:380px;
+    background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;
+    padding:.55rem .9rem;display:flex;align-items:center;gap:.6rem;color:var(--muted);
+  }
+  .search-box input{background:transparent;border:none;outline:none;color:#eaf6f9;font-size:.88rem;width:100%;}
+  .search-box input::placeholder{color:#5f7889;}
+ 
+  .filter-tabs{display:flex;gap:.3rem;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:3px;flex-wrap:wrap;}
+  .filter-tabs button{border:none;background:transparent;color:var(--muted);font-size:.8rem;font-weight:600;padding:.4rem .8rem;border-radius:7px;white-space:nowrap;}
+  .filter-tabs button.active{background:var(--cyan);color:#03181a;}
+ 
+  /* ===== Priority / status tags ===== */
+  .priority-tag{font-size:.74rem;font-weight:600;padding:.2rem .55rem;border-radius:6px;}
+  .priority-tag.low{background:rgba(55,240,138,.1);color:#37f08a;}
+  .priority-tag.medium{background:rgba(240,180,55,.1);color:#f0b437;}
+  .priority-tag.high{background:rgba(255,77,109,.1);color:#ff7893;}
+ 
+  .eta-tag{
+    font-size:.76rem;color:var(--muted);
+    display:flex;align-items:center;gap:.35rem;
+  }
+ 
+  /* ===== Track card ===== */
+  .track-card{padding:1.3rem 1.4rem;margin-bottom:1.1rem;}
+  .track-card:last-child{margin-bottom:0;}
+  .track-top{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    gap:1rem;flex-wrap:wrap;margin-bottom:1.3rem;
+  }
+  .track-cat-icon{
+    width:42px;height:42px;border-radius:11px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.1rem;flex-shrink:0;
+    background:rgba(55,240,216,.1);color:var(--cyan);
+  }
+  .track-title{font-weight:700;font-size:.98rem;}
+  .track-meta{color:var(--muted);font-size:.78rem;}
+ 
+  /* ===== Stepper ===== */
+  .tracker-steps{
+    display:flex;
+    align-items:flex-start;
+    position:relative;
+  }
+  .tracker-step{
+    flex:1;
+    text-align:center;
+    position:relative;
+    z-index:1;
+  }
+  .tracker-step .step-dot{
+    width:30px;height:30px;border-radius:50%;
+    margin:0 auto .6rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.9rem;
+    border:2px solid var(--line);
+    background:#0a1a2b;
+    color:var(--muted);
+  }
+  .tracker-step .step-label{font-size:.76rem;color:var(--muted);font-weight:600;}
+  .tracker-step .step-time{font-size:.68rem;color:#5f7889;margin-top:.15rem;}
+ 
+  .tracker-step.done .step-dot{
+    background:var(--cyan);border-color:var(--cyan);color:#03181a;
+  }
+  .tracker-step.done .step-label{color:#eaf6f9;}
+  .tracker-step.current .step-dot{
+    background:rgba(55,240,216,.15);border-color:var(--cyan);color:var(--cyan);
+    box-shadow:0 0 0 4px rgba(55,240,216,.12);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  .tracker-step.current .step-label{color:var(--cyan);}
+  @keyframes pulse{
+    0%,100%{box-shadow:0 0 0 4px rgba(55,240,216,.12);}
+    50%{box-shadow:0 0 0 7px rgba(55,240,216,.05);}
+  }
+ 
+  .tracker-line{
+    position:absolute;
+    top:15px;left:0;right:0;
+    height:2px;
+    background:var(--line);
+    z-index:0;
+  }
+  .tracker-line-fill{
+    position:absolute;
+    top:15px;left:0;
+    height:2px;
+    background:var(--cyan);
+    z-index:0;
+    transition:width .4s ease;
+  }
+  .tracker-wrap{position:relative;padding:0 15px;}
+ 
+  .empty-state{text-align:center;padding:3rem 1rem;color:var(--muted);}
+  .empty-state i{font-size:2.2rem;color:var(--cyan);opacity:.6;margin-bottom:.8rem;display:block;}
+ 
+  /* ===== Responsive ===== */
+  @media (max-width: 991.98px){
+    .sidebar{transform:translateX(-100%);transition:.25s ease;z-index:1050;box-shadow:0 0 40px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+    .main-wrap{margin-left:0;}
+    .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1040;}
+    .sidebar-backdrop.show{display:block;}
+    .menu-toggle{display:flex !important;}
+  }
+  .menu-toggle{display:none;}
+ 
+  @media (max-width: 767.98px){
+    .content{padding:1.4rem 1rem 2.5rem;}
+    .page-title{font-size:1.4rem;}
+    .tracker-step .step-label{font-size:.66rem;}
+    .tracker-step .step-time{display:none;}
+  }
+  @media (max-width: 575.98px){
+    .track-cat-icon{display:none;}
+  }
+</style>
+</head>
+<body>
+ 
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+ 
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="d-flex align-items-center gap-2 mb-4 px-1">
+    <div class="brand-mark"><i class="bi bi-shield-fill-check"></i></div>
+    <span class="brand-text">Campus <span class="care">Care</span></span>
+  </div>
+ 
+  <nav class="flex-grow-1">
+    <a href="/dashboard"class="nav-link-custom"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
+    <a href="Report.html" class="nav-link-custom"><i class="bi bi-plus-circle"></i> Report Issue</a>
+    <a href="my-reports.html" class="nav-link-custom"><i class="bi bi-file-earmark-text"></i> My Reports</a>
+    <a href="track-status.html" class="nav-link-custom active"><i class="bi bi-broadcast"></i> Track Status</a>
+    <a href="#" class="nav-link-custom"><i class="bi bi-bar-chart-line"></i> Analytics</a>
+    <a href="#" class="nav-link-custom"><i class="bi bi-bell"></i> Notifications <span class="nav-badge">3</span></a>
+    <a href="#" class="nav-link-custom"><i class="bi bi-gear"></i> Settings</a>
+  </nav>
+ 
+  <div class="sidebar-promo">
+    <div class="promo-icon"><i class="bi bi-mortarboard-fill"></i></div>
+    <h6>Better Campus<br>Better Tomorrow</h6>
+    <p>Together we build a safer, cleaner and smarter campus.</p>
+  </div>
+</aside>
+ 
+<!-- MAIN -->
+<div class="main-wrap">
+ 
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <button class="icon-btn menu-toggle" id="menuToggle"><i class="bi bi-list fs-4"></i></button>
+    <a href="/dashboard" class="back-link"><i class="bi bi-arrow-left"></i> Back to Dashboard</a>
+  </div>
+ 
+  <!-- CONTENT -->
+  <div class="content">
+ 
+    <h1 class="page-title">Track <span class="accent">Status</span></h1>
+    <p class="page-sub">Live progress on every issue you've reported.</p>
+ 
+    <!-- TOOLBAR -->
+    <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between mb-4">
+      <div class="filter-tabs" id="filterTabs">
+        <button class="active" data-filter="all">All</button>
+        <button data-filter="pending">Pending</button>
+        <button data-filter="progress">In Progress</button>
+        <button data-filter="resolved">Resolved</button>
+      </div>
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" id="searchInput" placeholder="Search by ticket ID or title...">
+      </div>
+    </div>
+ 
+    <!-- TRACK CARDS -->
+    <div id="trackList"></div>
+    <div class="panel empty-state" id="emptyState" style="display:none;">
+      <i class="bi bi-inbox"></i>
+      <p class="mb-0">No reports match this filter.</p>
+    </div>
+ 
+  </div>
+</div>
+ 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Mobile sidebar toggle
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    sidebar.classList.add('open');
+    backdrop.classList.add('show');
+  });
+  backdrop.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('show');
+  });
+ 
+ // =========================
+// TRACK STATUS - DATABASE
+// =========================
+
+const STAGES = ['Submitted', 'Acknowledged', 'In Progress', 'Resolved'];
+const STAGE_ICONS = ['bi-send-check', 'bi-eye', 'bi-tools', 'bi-check-lg'];
+
+let REPORTS = [];
+
+const PRIORITY_LABEL = {
+  low: 'Low',
+  medium: 'Medium',
+  high: 'High'
+};
+
+let activeFilter = 'all';
+let searchTerm = '';
+
+
+// =========================
+// STATUS NORMALIZE
+// =========================
+
+function normalizeStatus(status) {
+  const value = String(status || '').toLowerCase().trim();
+
+  if (value === 'pending') return 'pending';
+
+  if (
+    value === 'in progress' ||
+    value === 'in_progress' ||
+    value === 'progress'
+  ) {
+    return 'progress';
+  }
+
+  if (value === 'resolved') return 'resolved';
+
+  return 'pending';
+}
+
+
+// =========================
+// CATEGORY ICON
+// =========================
+
+function getCategoryIcon(category) {
+  const value = String(category || '').toLowerCase();
+
+  if (value.includes('water')) return 'bi-droplet';
+  if (value.includes('electric')) return 'bi-lightning';
+  if (value.includes('power')) return 'bi-lightning';
+  if (value.includes('hostel')) return 'bi-building';
+  if (value.includes('transport')) return 'bi-bus-front';
+  if (value.includes('canteen')) return 'bi-cup-straw';
+  if (value.includes('class')) return 'bi-easel2';
+  if (value.includes('health')) return 'bi-heart-pulse';
+  if (value.includes('wifi')) return 'bi-wifi';
+
+  return 'bi-file-earmark-text';
+}
+
+
+// =========================
+// DATE FORMAT
+// =========================
+
+function formatDate(value) {
+  if (!value) return null;
+
+  const d = new Date(value);
+
+  if (isNaN(d.getTime())) {
+    return String(value).split(' ')[0];
+  }
+
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+}
+
+
+// =========================
+// GET STAGE FROM STATUS
+// =========================
+
+function getStage(status) {
+
+  if (status === 'resolved') {
+    return 3;
+  }
+
+  if (status === 'progress') {
+    return 2;
+  }
+
+  return 0;
+}
+
+
+// =========================
+// PRIORITY TAG
+// =========================
+
+function priorityTag(priority) {
+
+  const value = String(priority || 'medium').toLowerCase();
+
+  return `
+    <span class="priority-tag ${value}">
+      ${PRIORITY_LABEL[value] || 'Medium'}
+    </span>
+  `;
+}
+
+
+// =========================
+// BUILD STEPPER
+// =========================
+
+function buildStepper(report) {
+
+  const fillPct =
+    (report.stage / (STAGES.length - 1)) * 100;
+
+  let steps = '';
+
+  STAGES.forEach((label, i) => {
+
+    let cls = '';
+
+    if (i < report.stage) {
+      cls = 'done';
+    }
+    else if (i === report.stage) {
+      cls = report.status === 'resolved'
+        ? 'done'
+        : 'current';
+    }
+
+    const icon =
+      i <= report.stage
+        ? `<i class="bi ${
+            i === report.stage && report.status !== 'resolved'
+              ? STAGE_ICONS[i]
+              : 'bi-check-lg'
+          }"></i>`
+        : (i + 1);
+
+    let time = '';
+
+    if (i === 0 && report.date) {
+      time = `<div class="step-time">${report.date}</div>`;
+    }
+
+    steps += `
+      <div class="tracker-step ${cls}">
+        <div class="step-dot">${icon}</div>
+        <div class="step-label">${label}</div>
+        ${time}
+      </div>
+    `;
+  });
+
+  return `
+    <div class="tracker-wrap">
+
+      <div class="tracker-line"></div>
+
+      <div
+        class="tracker-line-fill"
+        style="width:${fillPct}%;">
+      </div>
+
+      <div class="tracker-steps">
+        ${steps}
+      </div>
+
+    </div>
+  `;
+}
+
+
+// =========================
+// LOAD REPORTS FROM DATABASE
+// =========================
+
+async function loadReports() {
+
+  try {
+
+    const user =
+      JSON.parse(
+        localStorage.getItem('campuscare_user')
+      );
+
+    if (!user || !user.student_id) {
+
+      alert('Please sign in again.');
+
+      window.location.href = '/';
+
+      return;
+    }
+
+
+    const response = await fetch(
+      `/track-status?student_id=${encodeURIComponent(
+        user.student_id
+      )}`
+    );
+
+
+    const result = await response.json();
+
+
+    if (!response.ok || !result.success) {
+
+      throw new Error(
+        result.message ||
+        'Unable to load track status.'
+      );
+    }
+
+
+    REPORTS = result.reports.map(r => {
+
+      const status =
+        normalizeStatus(r.status);
+
+      return {
+        id: r.ticket_id,
+
+        title: r.issue_title,
+
+        category: r.category,
+
+        catIcon:
+          getCategoryIcon(r.category),
+
+        location: r.location,
+
+        priority:
+          String(
+            r.priority || 'medium'
+          ).toLowerCase(),
+
+        status: status,
+
+        stage:
+          getStage(status),
+
+        date:
+          formatDate(r.created_at),
+
+        eta:
+          status === 'resolved'
+            ? 'Resolved'
+            : status === 'progress'
+              ? 'In Progress'
+              : 'Awaiting review',
+
+        times: [
+          formatDate(r.created_at),
+          null,
+          null,
+          status === 'resolved'
+            ? formatDate(r.created_at)
+            : null
+        ]
+      };
+    });
+
+
+    render();
+
+  } catch (error) {
+
+    console.error(
+      'Track Status Error:',
+      error
+    );
+
+    document.getElementById(
+      'trackList'
+    ).innerHTML = `
+      <div class="panel empty-state">
+        <i class="bi bi-exclamation-circle"></i>
+        <p class="mb-0">
+          Unable to load your reports.
+        </p>
+      </div>
+    `;
+
+  }
+}
+
+
+// =========================
+// FILTER REPORTS
+// =========================
+
+function getFiltered() {
+
+  return REPORTS.filter(r => {
+
+    const matchesFilter =
+      activeFilter === 'all' ||
+      r.status === activeFilter;
+
+    const matchesSearch =
+      !searchTerm ||
+      r.title
+        .toLowerCase()
+        .includes(searchTerm) ||
+      r.id
+        .toLowerCase()
+        .includes(searchTerm);
+
+    return matchesFilter && matchesSearch;
+  });
+}
+
+
+// =========================
+// RENDER REPORTS
+// =========================
+
+function render() {
+
+  const data = getFiltered();
+
+  const list =
+    document.getElementById('trackList');
+
+  list.innerHTML = '';
+
+  document.getElementById(
+    'emptyState'
+  ).style.display =
+    data.length ? 'none' : 'block';
+
+
+  data.forEach(r => {
+
+    list.insertAdjacentHTML(
+      'beforeend',
+
+      `
+      <div class="panel track-card">
+
+        <div class="track-top">
+
+          <div class="d-flex align-items-center gap-3">
+
+            <div class="track-cat-icon">
+              <i class="bi ${r.catIcon}"></i>
+            </div>
+
+            <div>
+
+              <div class="track-title">
+                ${r.title}
+              </div>
+
+              <div class="track-meta">
+                #${r.id} &middot; ${r.location}
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="d-flex align-items-center gap-3">
+
+            ${priorityTag(r.priority)}
+
+            <span class="eta-tag">
+              <i class="bi bi-clock"></i>
+              ${r.eta}
+            </span>
+
+          </div>
+
+        </div>
+
+        ${buildStepper(r)}
+
+      </div>
+      `
+    );
+
+  });
+}
+
+
+// =========================
+// FILTER BUTTONS
+// =========================
+
+document
+  .querySelectorAll('#filterTabs button')
+  .forEach(btn => {
+
+    btn.addEventListener('click', function() {
+
+      document
+        .querySelector(
+          '#filterTabs button.active'
+        )
+        .classList.remove('active');
+
+      this.classList.add('active');
+
+      activeFilter =
+        this.dataset.filter;
+
+      render();
+    });
+
+  });
+
+
+// =========================
+// SEARCH
+// =========================
+
+document
+  .getElementById('searchInput')
+  .addEventListener('input', function() {
+
+    searchTerm =
+      this.value
+        .trim()
+        .toLowerCase();
+
+    render();
+
+  });
+
+
+// =========================
+// START
+// =========================
+
+loadReports();
+</script>
+</body>
+</html>

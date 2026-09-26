@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | Campus Care</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#040d17;
+    --cyan:#37f0d8;
+    --blue:#2f8fe0;
+    --line:rgba(80,200,220,.22);
+    --muted:#8fa6b8;
+    --panel:linear-gradient(160deg, rgba(11,32,48,.9), rgba(6,18,30,.9));
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:
+      radial-gradient(ellipse at 10% 10%, rgba(30,120,140,.18), transparent 45%),
+      radial-gradient(ellipse at 90% 80%, rgba(30,90,180,.15), transparent 50%),
+      var(--bg-deep);
+    font-family:'Poppins',sans-serif;
+    color:#eaf6f9;
+    min-height:100vh;
+  }
+  a{color:inherit;}
+ 
+  /* ===== Sidebar ===== */
+  .sidebar{
+    width:250px;min-height:100vh;
+    border-right:1px solid var(--line);
+    background:rgba(4,13,23,.6);
+    padding:1.4rem 1.1rem;
+    position:fixed;top:0;left:0;bottom:0;
+    display:flex;flex-direction:column;
+  }
+  .brand-mark{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#031018;overflow:hidden;flex-shrink:0;}
+  .brand-text{font-weight:700;font-size:1.1rem;}
+  .brand-text .care{color:var(--cyan);}
+  .admin-tag{
+    display:inline-flex;align-items:center;gap:.3rem;
+    background:rgba(255,77,109,.12);color:#ff7893;
+    font-size:.66rem;font-weight:700;letter-spacing:.4px;
+    padding:.15rem .5rem;border-radius:20px;margin-left:auto;
+  }
+  .nav-link-custom{
+    display:flex;align-items:center;gap:.7rem;
+    color:var(--muted);font-size:.92rem;font-weight:500;
+    padding:.65rem .85rem;border-radius:10px;margin-bottom:.25rem;
+    text-decoration:none;transition:.15s;
+  }
+  .nav-link-custom i{font-size:1.05rem;width:20px;text-align:center;}
+  .nav-link-custom:hover{background:rgba(255,255,255,.04);color:#eaf6f9;}
+  .nav-link-custom.active{
+    background:linear-gradient(90deg, rgba(255,77,109,.16), rgba(240,180,55,.10));
+    color:#eaf6f9;border:1px solid rgba(255,77,109,.35);
+  }
+  .sidebar-promo{
+    margin-top:auto;border:1px solid var(--line);border-radius:14px;padding:1.1rem;
+    background:rgba(255,255,255,.02);
+  }
+  .sidebar-promo .promo-icon{
+    width:40px;height:40px;border-radius:10px;background:rgba(255,77,109,.12);
+    display:flex;align-items:center;justify-content:center;color:#ff7893;font-size:1.1rem;margin-bottom:.7rem;
+  }
+  .sidebar-promo h6{font-weight:700;font-size:.92rem;margin-bottom:.4rem;line-height:1.3;}
+  .sidebar-promo p{color:var(--muted);font-size:.78rem;margin-bottom:0;line-height:1.4;}
+ 
+  /* ===== Main ===== */
+  .main-wrap{margin-left:250px;min-height:100vh;}
+  .topbar{
+    border-bottom:1px solid var(--line);
+    background:rgba(4,13,23,.55);
+    padding:.9rem 1.6rem;
+    display:flex;align-items:center;gap:1rem;
+  }
+  .icon-btn{
+    width:38px;height:38px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);border:1px solid transparent;background:transparent;
+    text-decoration:none;
+  }
+  .icon-btn:hover{border-color:var(--line);color:var(--cyan);}
+  .back-link{display:flex;align-items:center;gap:.5rem;color:var(--muted);text-decoration:none;font-size:.88rem;}
+  .back-link:hover{color:var(--cyan);}
+ 
+  .content{padding:1.8rem 1.6rem 3rem;}
+  .page-title{font-weight:800;font-size:1.7rem;margin-bottom:.15rem;}
+  .page-title .accent{color:#ff7893;}
+  .page-sub{color:var(--muted);font-size:.92rem;margin-bottom:1.6rem;}
+ 
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;}
+ 
+  /* ===== Summary chips ===== */
+  .summary-card{padding:1.1rem 1.3rem;display:flex;align-items:center;gap:.9rem;}
+  .summary-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;}
+  .summary-icon.all{background:rgba(94,179,255,.15);color:#5eb3ff;}
+  .summary-icon.pending{background:rgba(240,180,55,.15);color:#f0b437;}
+  .summary-icon.progress{background:rgba(150,110,240,.15);color:#a78bfa;}
+  .summary-icon.resolved{background:rgba(55,240,216,.15);color:var(--cyan);}
+  .summary-value{font-weight:800;font-size:1.35rem;line-height:1.1;}
+  .summary-label{color:var(--muted);font-size:.78rem;}
+ 
+  /* ===== Toolbar ===== */
+  .search-box{
+    flex:1;max-width:320px;
+    background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;
+    padding:.55rem .9rem;display:flex;align-items:center;gap:.6rem;color:var(--muted);
+  }
+  .search-box input{background:transparent;border:none;outline:none;color:#eaf6f9;font-size:.88rem;width:100%;}
+  .search-box input::placeholder{color:#5f7889;}
+  .filter-tabs{display:flex;gap:.3rem;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:3px;flex-wrap:wrap;}
+  .filter-tabs button{border:none;background:transparent;color:var(--muted);font-size:.8rem;font-weight:600;padding:.4rem .8rem;border-radius:7px;white-space:nowrap;}
+  .filter-tabs button.active{background:#ff4d6d;color:#fff;}
+ 
+  /* ===== Inline editable selects ===== */
+  .mini-select{
+    background:rgba(255,255,255,.03);
+    border:1px solid var(--line);
+    color:#eaf6f9;
+    border-radius:8px;
+    padding:.35rem .55rem;
+    font-size:.78rem;
+    font-weight:600;
+    appearance:none;-webkit-appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%238fa6b8' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right .5rem center;background-size:11px;
+    padding-right:1.6rem;
+    cursor:pointer;
+  }
+  .mini-select:focus{outline:none;border-color:var(--cyan);}
+  .mini-select.status-pending{color:#f0b437;border-color:rgba(240,180,55,.4);}
+  .mini-select.status-progress{color:#a78bfa;border-color:rgba(150,110,240,.4);}
+  .mini-select.status-resolved{color:var(--cyan);border-color:rgba(55,240,216,.4);}
+  .mini-select.priority-low{color:#37f08a;}
+  .mini-select.priority-medium{color:#f0b437;}
+  .mini-select.priority-high{color:#ff7893;}
+  .mini-select option{background:#0a1a2b;color:#eaf6f9;}
+ 
+  /* ===== Table ===== */
+  .reports-table{width:100%;border-collapse:collapse;}
+  .reports-table th{
+    text-align:left;color:var(--muted);font-size:.74rem;font-weight:600;
+    text-transform:uppercase;letter-spacing:.4px;
+    padding:.8rem 1rem;border-bottom:1px solid var(--line);
+    white-space:nowrap;
+  }
+  .reports-table td{
+    padding:.75rem 1rem;border-bottom:1px solid rgba(255,255,255,.05);
+    font-size:.85rem;vertical-align:middle;
+  }
+  .reports-table tr:last-child td{border-bottom:none;}
+  .reports-table tbody tr:hover{background:rgba(255,255,255,.02);}
+  .report-cat-icon{
+    width:32px;height:32px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:.9rem;flex-shrink:0;
+    background:rgba(255,77,109,.1);color:#ff7893;
+  }
+  .report-title{font-weight:600;}
+  .report-meta{color:var(--muted);font-size:.76rem;}
+  .reporter-chip{
+    width:26px;height:26px;border-radius:50%;
+    background:linear-gradient(135deg,var(--cyan),var(--blue));
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:.66rem;font-weight:700;color:#031018;margin-right:.4rem;
+  }
+ 
+  .saved-flash{
+    font-size:.7rem;color:var(--cyan);
+    opacity:0;transition:opacity .3s;
+  }
+  .saved-flash.show{opacity:1;}
+ 
+  .empty-state{text-align:center;padding:3rem 1rem;color:var(--muted);}
+  .empty-state i{font-size:2.2rem;color:#ff7893;opacity:.6;margin-bottom:.8rem;display:block;}
+ 
+  .reset-link{font-size:.78rem;color:var(--muted);text-decoration:none;}
+  .reset-link:hover{color:#ff7893;}
+ 
+  /* ===== Responsive ===== */
+  @media (max-width: 991.98px){
+    .sidebar{transform:translateX(-100%);transition:.25s ease;z-index:1050;box-shadow:0 0 40px rgba(0,0,0,.5);}
+    .sidebar.open{transform:translateX(0);}
+    .main-wrap{margin-left:0;}
+    .sidebar-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1040;}
+    .sidebar-backdrop.show{display:block;}
+    .menu-toggle{display:flex !important;}
+  }
+  .menu-toggle{display:none;}
+ 
+  @media (max-width: 767.98px){
+    .content{padding:1.4rem 1rem 2.5rem;}
+    .page-title{font-size:1.4rem;}
+  }
+.brand-mark {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.brand-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+</style>
+</head>
+<body>
+ 
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+ 
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="d-flex align-items-center gap-2 mb-4 px-1">
+<div class="brand-mark">
+    <img src="/static/campus logo.png" alt="Campus Care Logo">
+</div>    <span class="brand-text">Campus <span class="care">Care</span></span>
+    <span class="admin-tag"><i class="bi bi-lock-fill"></i> ADMIN</span>
+  </div>
+ 
+  <nav class="flex-grow-1">
+    <a href="admin.html" class="nav-link-custom active"><i class="bi bi-kanban-fill"></i> Manage Reports</a>
+    <a href="analytics.html" class="nav-link-custom"><i class="bi bi-bar-chart-line"></i> Analytics</a>
+    <a href="dashboard.html" class="nav-link-custom"><i class="bi bi-grid-1x2-fill"></i> Student View</a>
+  </nav>
+ 
+  <div class="sidebar-promo">
+    <div class="promo-icon"><i class="bi bi-shield-lock-fill"></i></div>
+    <h6>Admin Access</h6>
+    <p>Changes here affect what every reporter sees on their Track Status page.</p>
+  </div>
+</aside>
+ 
+<!-- MAIN -->
+<div class="main-wrap">
+ 
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <button class="icon-btn menu-toggle" id="menuToggle"><i class="bi bi-list fs-4"></i></button>
+    <a href="dashboard.html" class="back-link"><i class="bi bi-arrow-left"></i> Exit Admin</a>
+    <a href="#" class="ms-auto reset-link" id="resetDataLink"><i class="bi bi-arrow-counterclockwise me-1"></i>Reset demo data</a>
+  </div>
+ 
+  <!-- CONTENT -->
+  <div class="content">
+ 
+    <h1 class="page-title">Manage <span class="accent">Reports</span></h1>
+    <p class="page-sub">Every issue reported across campus &mdash; update status, priority, and assignment.</p>
+ 
+    <!-- SUMMARY CHIPS -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="panel summary-card">
+          <div class="summary-icon all"><i class="bi bi-collection"></i></div>
+          <div><div class="summary-value" id="countAll">0</div><div class="summary-label">Total Reports</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="panel summary-card">
+          <div class="summary-icon pending"><i class="bi bi-hourglass-split"></i></div>
+          <div><div class="summary-value" id="countPending">0</div><div class="summary-label">Pending</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="panel summary-card">
+          <div class="summary-icon progress"><i class="bi bi-arrow-repeat"></i></div>
+          <div><div class="summary-value" id="countProgress">0</div><div class="summary-label">In Progress</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="panel summary-card">
+          <div class="summary-icon resolved"><i class="bi bi-check-circle"></i></div>
+          <div><div class="summary-value" id="countResolved">0</div><div class="summary-label">Resolved</div></div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- TOOLBAR -->
+    <div class="d-flex flex-wrap gap-3 align-items-center justify-content-between mb-3">
+      <div class="filter-tabs" id="filterTabs">
+        <button class="active" data-filter="all">All</button>
+        <button data-filter="pending">Pending</button>
+        <button data-filter="progress">In Progress</button>
+        <button data-filter="resolved">Resolved</button>
+      </div>
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" id="searchInput" placeholder="Search reports, reporters, locations...">
+      </div>
+    </div>
+ 
+    <!-- TABLE -->
+    <div class="panel">
+      <div class="table-responsive">
+        <table class="reports-table">
+          <thead>
+            <tr>
+              <th>Issue</th>
+              <th>Reporter</th>
+              <th>Location</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Assigned Team</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="reportsTableBody"></tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <i class="bi bi-inbox"></i>
+        <p class="mb-0">No reports match this filter.</p>
+      </div>
+    </div>
+ 
+  </div>
+</div>
+ 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Mobile sidebar toggle
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  document.getElementById('menuToggle').addEventListener('click', () => {
+    sidebar.classList.add('open');
+    backdrop.classList.add('show');
+  });
+  backdrop.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('show');
+  });
+ 
+  // ---- Shared "database" via localStorage (demo only — swap for a real API) ----
+  const STORAGE_KEY = 'cc_reports';
+ 
+  const DEFAULT_REPORTS = [
+    { id:'CC-4821', title:'Water leakage near restroom',    catIcon:'bi-droplet',     reporter:'Aditi Sharma', location:'Block C',    priority:'high',   status:'pending',  team:'unassigned',  date:'2026-09-12' },
+    { id:'CC-4809', title:'Broken bench in reading area',    catIcon:'bi-tools',       reporter:'Rahul Verma',  location:'Library',    priority:'low',    status:'resolved', team:'facilities',  date:'2026-09-11' },
+    { id:'CC-4795', title:'Power outage in room 214',        catIcon:'bi-lightning',   reporter:'Aditi Sharma', location:'Hostel',     priority:'high',   status:'progress', team:'electrical',  date:'2026-09-10' },
+    { id:'CC-4780', title:'Cleaning request after event',    catIcon:'bi-cup-straw',   reporter:'Meera Nair',   location:'Canteen',    priority:'medium', status:'resolved', team:'housekeeping',date:'2026-09-08' },
+    { id:'CC-4772', title:'Projector not working',           catIcon:'bi-easel2',     reporter:'Karan Singh',  location:'Room 108',   priority:'medium', status:'progress', team:'it-support',  date:'2026-09-07' },
+    { id:'CC-4761', title:'Bus delayed on Route 4',          catIcon:'bi-bus-front',   reporter:'Meera Nair',   location:'Main Gate',  priority:'low',    status:'resolved', team:'transport',   date:'2026-09-05' },
+    { id:'CC-4750', title:'AC not cooling in health center', catIcon:'bi-heart-pulse', reporter:'Karan Singh',  location:'Health Ctr', priority:'medium', status:'pending',  team:'unassigned',  date:'2026-09-03' },
+    { id:'CC-4733', title:'WiFi down in Block A',            catIcon:'bi-wifi-off',    reporter:'Rahul Verma',  location:'Block A',    priority:'high',   status:'resolved', team:'it-support',  date:'2026-08-29' }
+  ];
+ 
+  function loadReports(){
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : structuredClone(DEFAULT_REPORTS);
+    } catch(e){
+      return structuredClone(DEFAULT_REPORTS);
+    }
+  }
+  function saveReports(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(REPORTS));
+  }
+ 
+  let REPORTS = loadReports();
+ 
+  const TEAMS = {
+    'unassigned': 'Unassigned',
+    'facilities': 'Facilities',
+    'electrical': 'Electrical',
+    'housekeeping': 'Housekeeping',
+    'it-support': 'IT Support',
+    'transport': 'Transport'
+  };
+ 
+  let activeFilter = 'all';
+  let searchTerm = '';
+ 
+  function initials(name){
+    return name.split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase();
+  }
+  function formatDate(iso){
+    return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric' });
+  }
+ 
+  function getFiltered(){
+    return REPORTS.filter(r => {
+      const matchesFilter = activeFilter === 'all' || r.status === activeFilter;
+      const matchesSearch = !searchTerm ||
+        r.title.toLowerCase().includes(searchTerm) ||
+        r.id.toLowerCase().includes(searchTerm) ||
+        r.reporter.toLowerCase().includes(searchTerm) ||
+        r.location.toLowerCase().includes(searchTerm);
+      return matchesFilter && matchesSearch;
+    });
+  }
+ 
+  function updateCounts(){
+    document.getElementById('countAll').textContent = REPORTS.length;
+    document.getElementById('countPending').textContent = REPORTS.filter(r => r.status === 'pending').length;
+    document.getElementById('countProgress').textContent = REPORTS.filter(r => r.status === 'progress').length;
+    document.getElementById('countResolved').textContent = REPORTS.filter(r => r.status === 'resolved').length;
+  }
+ 
+  function flashSaved(id){
+    const el = document.querySelector(`.saved-flash[data-row="${id}"]`);
+    if(!el) return;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 1200);
+  }
+ 
+  function render(){
+    const data = getFiltered();
+    const tbody = document.getElementById('reportsTableBody');
+    tbody.innerHTML = '';
+    document.getElementById('emptyState').style.display = data.length ? 'none' : 'block';
+ 
+    data.forEach(r => {
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <div class="report-cat-icon"><i class="bi ${r.catIcon}"></i></div>
+              <div>
+                <div class="report-title">${r.title}</div>
+                <div class="report-meta">#${r.id}</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="reporter-chip">${initials(r.reporter)}</span>${r.reporter}</td>
+          <td class="report-meta">${r.location}</td>
+          <td>
+            <select class="mini-select priority-${r.priority}" data-id="${r.id}" data-field="priority">
+              <option value="low" ${r.priority==='low'?'selected':''}>Low</option>
+              <option value="medium" ${r.priority==='medium'?'selected':''}>Medium</option>
+              <option value="high" ${r.priority==='high'?'selected':''}>High</option>
+            </select>
+          </td>
+          <td>
+            <select class="mini-select status-${r.status}" data-id="${r.id}" data-field="status">
+              <option value="pending" ${r.status==='pending'?'selected':''}>Pending</option>
+              <option value="progress" ${r.status==='progress'?'selected':''}>In Progress</option>
+              <option value="resolved" ${r.status==='resolved'?'selected':''}>Resolved</option>
+            </select>
+          </td>
+          <td>
+            <select class="mini-select" data-id="${r.id}" data-field="team">
+              ${Object.entries(TEAMS).map(([val, label]) => `<option value="${val}" ${r.team===val?'selected':''}>${label}</option>`).join('')}
+            </select>
+          </td>
+          <td class="report-meta">${formatDate(r.date)}</td>
+          <td><span class="saved-flash" data-row="${r.id}"><i class="bi bi-check-lg"></i> Saved</span></td>
+        </tr>
+      `);
+    });
+ 
+    // Wire inline edit handlers
+    tbody.querySelectorAll('.mini-select').forEach(sel => {
+      sel.addEventListener('change', function(){
+        const id = this.dataset.id;
+        const field = this.dataset.field;
+        const report = REPORTS.find(r => r.id === id);
+        if(!report) return;
+        report[field] = this.value;
+        saveReports();
+        updateCounts();
+ 
+        // Update the select's own color class if it's status/priority
+        if(field === 'status'){
+          this.className = 'mini-select status-' + this.value;
+        } else if(field === 'priority'){
+          this.className = 'mini-select priority-' + this.value;
+        }
+        flashSaved(id);
+      });
+    });
+  }
+ 
+  document.querySelectorAll('#filterTabs button').forEach(btn => {
+    btn.addEventListener('click', function(){
+      document.querySelector('#filterTabs button.active').classList.remove('active');
+      this.classList.add('active');
+      activeFilter = this.dataset.filter;
+      render();
+    });
+  });
+ 
+  document.getElementById('searchInput').addEventListener('input', function(){
+    searchTerm = this.value.trim().toLowerCase();
+    render();
+  });
+ 
+  document.getElementById('resetDataLink').addEventListener('click', function(e){
+    e.preventDefault();
+    if(confirm('Reset all report data back to the original demo set?')){
+      REPORTS = structuredClone(DEFAULT_REPORTS);
+      saveReports();
+      updateCounts();
+      render();
+    }
+  });
+ 
+  updateCounts();
+  render();
+</script>
+</body>
+</html>
+ 
+
+
+
+

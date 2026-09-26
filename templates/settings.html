@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Care | Settings</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy-950: #0a0f1a;
+            --navy-900: #0d1521;
+            --navy-800: #111d2e;
+            --navy-700: #16233a;
+            --charcoal: #0f141c;
+            --teal-400: #2ee6d6;
+            --teal-500: #1fc9bb;
+            --blue-400: #6ea8ff;
+            --blue-500: #4f83e8;
+            --text: #eef4ff;
+            --muted: #8d9bb0;
+            --border: rgba(255,255,255,.08);
+            --danger: #ff6b6b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--navy-950);
+            color: var(--text);
+            font-family: "Inter", sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: var(--navy-900);
+            border-right: 1px solid var(--border);
+            padding: 25px 15px;
+            z-index: 1000;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px 28px;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--teal-400), var(--blue-500));
+            color: #071019;
+            font-size: 21px;
+        }
+
+        .brand-text {
+            font-family: "Space Grotesk", sans-serif;
+            font-weight: 700;
+            font-size: 19px;
+        }
+
+        .brand-text span {
+            display: block;
+            color: var(--teal-400);
+            font-size: 10px;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .nav-title {
+            color: #66758a;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 14px;
+            margin-top: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 12px 14px;
+            margin: 4px 0;
+            border-radius: 10px;
+            color: var(--muted);
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .nav-link i {
+            font-size: 17px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(46,230,214,.08);
+            color: var(--teal-400);
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 76px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10,15,26,.85);
+        }
+
+        .page-title {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .avatar-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--teal-400), var(--blue-500));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #071019;
+            font-weight: 700;
+            overflow: hidden;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 30px 35px 50px;
+            max-width: 1100px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            border: none;
+            background: transparent;
+            color: var(--muted);
+            padding: 12px 18px;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-button:hover {
+            color: var(--text);
+        }
+
+        .tab-button.active {
+            color: var(--teal-400);
+            border-bottom-color: var(--teal-400);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .settings-card {
+            background: var(--charcoal);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .card-description {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 22px;
+        }
+
+        .form-label {
+            color: #c9d3e3;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 7px;
+        }
+
+        .form-control,
+        .form-select {
+            background: var(--navy-900);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 9px;
+            padding: 11px 13px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: var(--navy-900);
+            color: var(--text);
+            border-color: var(--teal-400);
+            box-shadow: 0 0 0 3px rgba(46,230,214,.08);
+        }
+
+        .form-control:disabled {
+            opacity: .6;
+        }
+
+        .form-select option {
+            background: var(--navy-900);
+            color: white;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        .btn-primary-custom {
+            border: none;
+            border-radius: 9px;
+            padding: 11px 20px;
+            background: linear-gradient(135deg, var(--teal-400), var(--blue-500));
+            color: #071019;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-primary-custom:hover {
+            opacity: .9;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: #cdd7e5;
+            border-radius: 9px;
+            padding: 10px 17px;
+            cursor: pointer;
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--teal-400);
+            color: var(--teal-400);
+        }
+
+        /* TOGGLES */
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 17px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .setting-desc {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .form-check-input {
+            width: 42px;
+            height: 22px;
+            background-color: #273244;
+            border-color: transparent;
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--teal-500);
+            border-color: var(--teal-500);
+        }
+
+        /* PASSWORD */
+
+        #passwordForm {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* DANGER */
+
+        .danger-card {
+            border-color: rgba(255,107,107,.25);
+        }
+
+        .danger-title {
+            color: var(--danger);
+        }
+
+        .danger-button {
+            background: transparent;
+            border: 1px solid rgba(255,107,107,.4);
+            color: var(--danger);
+            padding: 9px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* TOAST */
+
+        .toast-message {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #162235;
+            border: 1px solid var(--teal-400);
+            color: white;
+            padding: 13px 18px;
+            border-radius: 10px;
+            display: none;
+            z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0,0,0,.3);
+        }
+
+        .toast-message.error {
+            border-color: var(--danger);
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 70px;
+                padding: 20px 8px;
+            }
+
+            .brand {
+                justify-content: center;
+                padding: 0 0 25px;
+            }
+
+            .brand-text,
+            .nav-title,
+            .nav-link span {
+                display: none;
+            }
+
+            .nav-link {
+                justify-content: center;
+                padding: 13px 8px;
+            }
+
+            .main {
+                margin-left: 70px;
+            }
+
+            .topbar {
+                padding: 0 20px;
+            }
+
+            .content {
+                padding: 25px 20px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .topbar {
+                height: 70px;
+            }
+
+            .page-title {
+                font-size: 19px;
+            }
+
+            .settings-card {
+                padding: 18px;
+            }
+
+            .setting-row {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="bi bi-buildings"></i>
+        </div>
+
+        <div class="brand-text">
+            Campus Care
+            <span>REPORT. TRACK. RESOLVE.</span>
+        </div>
+    </div>
+
+    <div class="nav-title">Main Menu</div>
+
+    <a href="/dashboard" class="nav-link">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+    </a>
+
+    <a href="/report-issue" class="nav-link">
+        <i class="bi bi-plus-circle"></i>
+        <span>Report Issue</span>
+    </a>
+
+    <a href="/Myreports.html" class="nav-link">
+        <i class="bi bi-file-earmark-text"></i>
+        <span>My Reports</span>
+    </a>
+
+    <a href="/track.html" class="nav-link">
+        <i class="bi bi-activity"></i>
+        <span>Track Status</span>
+    </a>
+
+    <a href="/analytics.html" class="nav-link">
+        <i class="bi bi-bar-chart"></i>
+        <span>Analytics</span>
+    </a>
+
+    <a href="/notifications" class="nav-link">
+        <i class="bi bi-bell"></i>
+        <span>Notifications</span>
+    </a>
+
+    <div class="nav-title">Account</div>
+
+    <a href="/settings" class="nav-link active">
+        <i class="bi bi-gear"></i>
+        <span>Settings</span>
+    </a>
+
+    <a href="/" class="nav-link">
+        <i class="bi bi-box-arrow-left"></i>
+        <span>Logout</span>
+    </a>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+        <div>
+            <div class="page-title">Settings</div>
+            <div class="page-subtitle">
+                Manage your Campus Care account
+            </div>
+        </div>
+
+        <div class="avatar-circle" id="topAvatarInitials">
+            <span id="topAvatarText">U</span>
+            <img id="topAvatarImage" src="" alt="Profile Photo">
+        </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+    <section class="content">
+
+        <!-- TABS -->
+        <div class="tabs">
+
+            <button class="tab-button active"
+                    onclick="openTab(event, 'generalTab')">
+                <i class="bi bi-person"></i>
+                General
+            </button>
+
+            <button class="tab-button"
+                    onclick="openTab(event, 'notificationTab')">
+                <i class="bi bi-bell"></i>
+                Notifications
+            </button>
+
+            <button class="tab-button"
+                    onclick="openTab(event, 'privacyTab')">
+                <i class="bi bi-shield-lock"></i>
+                Privacy & Security
+            </button>
+
+            <button class="tab-button"
+                    onclick="openTab(event, 'dangerTab')">
+                <i class="bi bi-exclamation-triangle"></i>
+                Danger Zone
+            </button>
+
+        </div>
+
+
+        <!-- GENERAL TAB -->
+        <div id="generalTab" class="tab-content active">
+
+            <div class="settings-card">
+
+                <div class="card-title">
+                    Profile Information
+                </div>
+
+                <div class="card-description">
+                    Update your personal information.
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="field">
+
+                            <label class="form-label">
+                                Full Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="fullName"
+                                class="form-control"
+                                placeholder="Enter your full name">
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="field">
+
+                            <label class="form-label">
+                                Student ID / Roll Number
+                            </label>
+
+                            <input
+                                type="text"
+                                id="studentId"
+                                class="form-control"
+                                disabled>
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <div class="field">
+
+                            <label class="form-label">
+                                College Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                class="form-control"
+                                placeholder="Enter your email">
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <div class="field">
+
+                            <label class="form-label">
+                                Department
+                            </label>
+
+                            <select id="department" class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="CSE">CSE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EEE">EEE</option>
+                                <option value="MECH">MECH</option>
+                                <option value="CIVIL">CIVIL</option>
+                                <option value="IT">IT</option>
+                                <option value="Other">Other</option>
+
+                            </select>
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <div class="field">
+
+                            <label class="form-label">
+                                Year
+                            </label>
+
+                            <select id="year" class="form-select">
+
+                                <option value="">Select</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+
+                            </select>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="btn-primary-custom"
+                    onclick="updateProfile()">
+
+                    <i class="bi bi-check2"></i>
+                    Save Changes
+
+                </button>
+
+            </div>
+
+
+            <div class="settings-card">
+
+                <div class="card-title">
+                    Interface Preferences
+                </div>
+
+                <div class="card-description">
+                    Customize how Campus Care looks for you.
+                </div>
+
+                <div class="setting-row">
+
+                    <div>
+                        <div class="setting-label">
+                            Dark Theme
+                        </div>
+
+                        <div class="setting-desc">
+                            Keep the Campus Care interface in dark mode.
+                        </div>
+                    </div>
+
+                    <input
+                        type="checkbox"
+                        class="form-check-input"
+                        checked
+                        disabled>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NOTIFICATIONS TAB -->
+        <div id="notificationTab" class="tab-content">
+
+            <div class="settings-card">
+
+                <div class="card-title">
+                    Notification Preferences
+                </div>
+
+                <div class="card-description">
+                    Choose which notifications you want to receive.
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+                        <div class="setting-label">
+                            Report Updates
+                        </div>
+
+                        <div class="setting-desc">
+                            Get notified when your report status changes.
+                        </div>
+                    </div>
+
+                    <input
+                        id="reportUpdates"
+                        type="checkbox"
+                        class="form-check-input"
+                        checked>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+                        <div class="setting-label">
+                            System Notifications
+                        </div>
+
+                        <div class="setting-desc">
+                            Receive important Campus Care announcements.
+                        </div>
+                    </div>
+
+                    <input
+                        id="systemNotifications"
+                        type="checkbox"
+                        class="form-check-input"
+                        checked>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+                        <div class="setting-label">
+                            Email Notifications
+                        </div>
+
+                        <div class="setting-desc">
+                            Receive updates through your registered email.
+                        </div>
+                    </div>
+
+                    <input
+                        id="emailNotifications"
+                        type="checkbox"
+                        class="form-check-input">
+
+                </div>
+
+
+                <br>
+
+                <button
+                    class="btn-primary-custom"
+                    onclick="showToast('Notification preferences saved')">
+
+                    <i class="bi bi-check2"></i>
+                    Save Preferences
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRIVACY TAB -->
+        <div id="privacyTab" class="tab-content">
+
+            <div class="settings-card">
+
+                <div class="card-title">
+                    Password & Security
+                </div>
+
+                <div class="card-description">
+                    Keep your Campus Care account secure.
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+                        <div class="setting-label">
+                            Password
+                        </div>
+
+                        <div class="setting-desc">
+                            Change your account password.
+                        </div>
+                    </div>
+
+                    <button
+                        class="btn-ghost"
+                        onclick="showPasswordForm()">
+
+                        Change Password
+
+                    </button>
+
+                </div>
+
+
+                <div id="passwordForm">
+
+                    <div class="field">
+
+                        <label class="form-label">
+                            Current Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="currentPassword"
+                            class="form-control"
+                            placeholder="Enter current password">
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label class="form-label">
+                            New Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="newPassword"
+                            class="form-control"
+                            placeholder="Enter new password">
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label class="form-label">
+                            Confirm New Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="confirmPassword"
+                            class="form-control"
+                            placeholder="Re-enter new password">
+
+                    </div>
+
+
+                    <button
+                        class="btn-primary-custom"
+                        onclick="changePassword()">
+
+                        <i class="bi bi-lock"></i>
+                        Update Password
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DANGER TAB -->
+        <div id="dangerTab" class="tab-content">
+
+            <div class="settings-card danger-card">
+
+                <div class="card-title danger-title">
+                    Danger Zone
+                </div>
+
+                <div class="card-description">
+                    These actions are irreversible. Please be careful.
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+                        <div class="setting-label">
+                            Deactivate Account
+                        </div>
+
+                        <div class="setting-desc">
+                            This option requires backend account-management support.
+                        </div>
+                    </div>
+
+                    <button
+                        class="danger-button"
+                        onclick="dangerMessage()">
+
+                        Deactivate
+
+                    </button>
+
+                </div>
+
+
+                <div class="setting-row">
+
+                    <div>
+                        <div class="setting-label">
+                            Delete Account
+                        </div>
+
+                        <div class="setting-desc">
+                            This option requires backend account-management support.
+                        </div>
+                    </div>
+
+                    <button
+                        class="danger-button"
+                        onclick="dangerMessage()">
+
+                        Delete Account
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- TOAST -->
+<div id="toast" class="toast-message"></div>
+
+
+<script>
+
+    /* =========================
+       TAB SYSTEM
+    ========================= */
+
+    function openTab(event, tabId) {
+
+        document
+            .querySelectorAll(".tab-content")
+            .forEach(tab => {
+                tab.classList.remove("active");
+            });
+
+        document
+            .querySelectorAll(".tab-button")
+            .forEach(button => {
+                button.classList.remove("active");
+            });
+
+        document
+            .getElementById(tabId)
+            .classList.add("active");
+
+        event.currentTarget.classList.add("active");
+    }
+
+
+    /* =========================
+       GET LOGGED USER
+    ========================= */
+
+    function getLoggedUser() {
+
+        const savedUser =
+            localStorage.getItem("campuscare_user");
+
+        if (!savedUser) {
+            window.location.href = "/";
+            return null;
+        }
+
+        try {
+            return JSON.parse(savedUser);
+        } catch (error) {
+            localStorage.removeItem("campuscare_user");
+            window.location.href = "/";
+            return null;
+        }
+    }
+
+
+    /* =========================
+       LOAD USER SETTINGS
+    ========================= */
+
+    async function loadUserSettings() {
+
+        const user = getLoggedUser();
+
+        if (!user) return;
+
+        const studentId =
+            user.student_id ||
+            user.studentId;
+
+        if (!studentId) {
+            showToast("Student ID not found", true);
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                `/settings/user?student_id=${encodeURIComponent(studentId)}`
+            );
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+
+                showToast(
+                    data.message || "Unable to load profile",
+                    true
+                );
+
+                return;
+            }
+
+
+            const profile = data.user;
+
+            document.getElementById("fullName").value =
+                profile.full_name || "";
+
+            document.getElementById("studentId").value =
+                profile.student_id || "";
+
+            document.getElementById("email").value =
+                profile.email || "";
+
+            document.getElementById("department").value =
+                profile.department || "";
+
+            document.getElementById("year").value =
+                profile.year || "";
+
+
+            updateAvatar(profile.full_name);
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "Unable to connect to server",
+                true
+            );
+        }
+    }
+
+
+    /* =========================
+       UPDATE PROFILE
+    ========================= */
+
+    async function updateProfile() {
+
+        const user = getLoggedUser();
+
+        if (!user) return;
+
+
+        const studentId =
+            user.student_id ||
+            user.studentId;
+
+        const fullName =
+            document.getElementById("fullName").value.trim();
+
+        const email =
+            document.getElementById("email").value.trim();
+
+        const department =
+            document.getElementById("department").value;
+
+        const year =
+            document.getElementById("year").value;
+
+
+        if (!fullName || !email || !department || !year) {
+
+            showToast(
+                "Please fill all profile fields",
+                true
+            );
+
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                "/settings/update-profile",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        student_id: studentId,
+                        full_name: fullName,
+                        email: email,
+                        department: department,
+                        year: year
+                    })
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                showToast(
+                    data.message || "Profile update failed",
+                    true
+                );
+
+                return;
+            }
+
+
+            /* UPDATE LOCAL STORAGE */
+
+            const updatedUser = {
+
+                ...user,
+
+                name: fullName,
+
+                full_name: fullName,
+
+                student_id: studentId,
+
+                email: email,
+
+                department: department,
+
+                year: year
+
+            };
+
+
+            localStorage.setItem(
+                "campuscare_user",
+                JSON.stringify(updatedUser)
+            );
+
+
+            updateAvatar(fullName);
+
+            showToast(
+                "Profile updated successfully"
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "Server connection failed",
+                true
+            );
+        }
+    }
+
+
+    /* =========================
+       SHOW PASSWORD FORM
+    ========================= */
+
+    function showPasswordForm() {
+
+        const form =
+            document.getElementById("passwordForm");
+
+        if (form.style.display === "block") {
+
+            form.style.display = "none";
+
+        } else {
+
+            form.style.display = "block";
+
+        }
+    }
+
+
+    /* =========================
+       CHANGE PASSWORD
+    ========================= */
+
+    async function changePassword() {
+
+        const user = getLoggedUser();
+
+        if (!user) return;
+
+
+        const studentId =
+            user.student_id ||
+            user.studentId;
+
+
+        const currentPassword =
+            document.getElementById("currentPassword").value;
+
+        const newPassword =
+            document.getElementById("newPassword").value;
+
+        const confirmPassword =
+            document.getElementById("confirmPassword").value;
+
+
+        if (
+            !currentPassword ||
+            !newPassword ||
+            !confirmPassword
+        ) {
+
+            showToast(
+                "Please fill all password fields",
+                true
+            );
+
+            return;
+        }
+
+
+        if (newPassword !== confirmPassword) {
+
+            showToast(
+                "New passwords do not match",
+                true
+            );
+
+            return;
+        }
+
+
+        if (newPassword.length < 6) {
+
+            showToast(
+                "Password must contain at least 6 characters",
+                true
+            );
+
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                "/settings/change-password",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        student_id: studentId,
+
+                        current_password:
+                            currentPassword,
+
+                        new_password:
+                            newPassword,
+
+                        confirm_password:
+                            confirmPassword
+
+                    })
+                }
+            );
+
+
+            const data = await response.json();
+
+
+            if (!response.ok || !data.success) {
+
+                showToast(
+                    data.message || "Password change failed",
+                    true
+                );
+
+                return;
+            }
+
+
+            document.getElementById(
+                "currentPassword"
+            ).value = "";
+
+            document.getElementById(
+                "newPassword"
+            ).value = "";
+
+            document.getElementById(
+                "confirmPassword"
+            ).value = "";
+
+
+            document.getElementById(
+                "passwordForm"
+            ).style.display = "none";
+
+
+            showToast(
+                "Password changed successfully"
+            );
+
+        } catch (error) {
+
+            console.error(error);
+
+            showToast(
+                "Server connection failed",
+                true
+            );
+        }
+    }
+
+
+    /* =========================
+       AVATAR
+    ========================= */
+
+    function updateAvatar(name) {
+
+        if (!name) return;
+
+        const parts =
+            name.trim().split(/\s+/);
+
+        let initials = "";
+
+        if (parts.length >= 2) {
+
+            initials =
+                parts[0].charAt(0) +
+                parts[parts.length - 1].charAt(0);
+
+        } else {
+
+            initials =
+                parts[0].charAt(0);
+
+        }
+
+
+        document.getElementById(
+            "topAvatarText"
+        ).textContent =
+            initials.toUpperCase();
+    }
+
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    function showToast(message, error = false) {
+
+        const toast =
+            document.getElementById("toast");
+
+        toast.textContent = message;
+
+        toast.classList.toggle(
+            "error",
+            error
+        );
+
+        toast.style.display = "block";
+
+
+        setTimeout(() => {
+
+            toast.style.display = "none";
+
+        }, 3000);
+    }
+
+
+    /* =========================
+       DANGER MESSAGE
+    ========================= */
+
+    function dangerMessage() {
+
+        showToast(
+            "Account management is not connected to the backend yet.",
+            true
+        );
+    }
+
+
+    /* =========================
+       PAGE LOAD
+    ========================= */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            loadUserSettings();
+
+        }
+    );
+
+</script>
+
+</body>
+</html>

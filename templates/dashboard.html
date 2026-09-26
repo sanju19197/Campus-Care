@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Campus Care</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-deep: #040d17;
+            --cyan: #37f0d8;
+            --blue: #2f8fe0;
+            --line: rgba(80, 200, 220, .22);
+            --muted: #8fa6b8;
+
+            --panel: linear-gradient(
+                160deg,
+                rgba(11, 32, 48, .9),
+                rgba(6, 18, 30, .9)
+            );
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background:
+                radial-gradient(
+                    ellipse at 10% 10%,
+                    rgba(30, 120, 140, .18),
+                    transparent 45%
+                ),
+                radial-gradient(
+                    ellipse at 90% 80%,
+                    rgba(30, 90, 180, .15),
+                    transparent 50%
+                ),
+                var(--bg-deep);
+
+            font-family: 'Poppins', sans-serif;
+            color: #eaf6f9;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* ================================
+           SIDEBAR
+        ================================= */
+
+        .sidebar {
+            width: 250px;
+            min-height: 100vh;
+
+            border-right: 1px solid var(--line);
+            background: rgba(4, 13, 23, .6);
+
+            padding: 1.4rem 1.1rem;
+
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 1050;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 9px;
+
+            background: linear-gradient(
+                135deg,
+                var(--cyan),
+                var(--blue)
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .brand-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .brand-text .care {
+            color: var(--cyan);
+        }
+
+        /* ================================
+           NAVIGATION
+        ================================= */
+
+        .nav-link-custom {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+
+            color: var(--muted);
+
+            font-size: .92rem;
+            font-weight: 500;
+
+            padding: .65rem .85rem;
+
+            border-radius: 10px;
+            margin-bottom: .25rem;
+
+            text-decoration: none;
+
+            transition: .15s;
+        }
+
+        .nav-link-custom i {
+            font-size: 1.05rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-link-custom:hover {
+            background: rgba(255, 255, 255, .04);
+            color: #eaf6f9;
+        }
+
+        .nav-link-custom.active {
+            background: linear-gradient(
+                90deg,
+                rgba(55, 240, 216, .16),
+                rgba(47, 143, 224, .10)
+            );
+
+            color: #eaf6f9;
+
+            border: 1px solid rgba(55, 240, 216, .35);
+        }
+
+        .nav-badge {
+            margin-left: auto;
+
+            background: #ff4d6d;
+            color: #fff;
+
+            font-size: .68rem;
+            font-weight: 700;
+
+            padding: .1rem .45rem;
+            border-radius: 20px;
+        }
+
+        /* ================================
+           SIDEBAR PROMO
+        ================================= */
+
+        .sidebar-promo {
+            margin-top: auto;
+
+            border: 1px solid var(--line);
+            border-radius: 14px;
+
+            padding: 1.1rem;
+
+            background: rgba(255, 255, 255, .02);
+        }
+
+        .sidebar-promo .promo-icon {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 10px;
+
+            background: rgba(55, 240, 216, .12);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--cyan);
+
+            font-size: 1.1rem;
+            margin-bottom: .7rem;
+        }
+
+        .sidebar-promo h6 {
+            font-weight: 700;
+            font-size: .92rem;
+            margin-bottom: .4rem;
+            line-height: 1.3;
+        }
+
+        .sidebar-promo p {
+            color: var(--muted);
+            font-size: .78rem;
+            margin-bottom: 0;
+            line-height: 1.4;
+        }
+
+        /* ================================
+           MAIN
+        ================================= */
+
+        .main-wrap {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            border-bottom: 1px solid var(--line);
+
+            background: rgba(4, 13, 23, .55);
+
+            padding: .9rem 1.6rem;
+
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 420px;
+
+            background: rgba(255, 255, 255, .03);
+
+            border: 1px solid var(--line);
+            border-radius: 10px;
+
+            padding: .55rem .9rem;
+
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+
+            color: var(--muted);
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+
+            color: #eaf6f9;
+
+            font-size: .88rem;
+            width: 100%;
+        }
+
+        .search-box input::placeholder {
+            color: #5f7889;
+        }
+
+        .icon-btn {
+            position: relative;
+
+            width: 38px;
+            height: 38px;
+
+            border-radius: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: var(--muted);
+
+            border: 1px solid transparent;
+            background: transparent;
+
+            text-decoration: none;
+        }
+
+        .icon-btn:hover {
+            border-color: var(--line);
+            color: var(--cyan);
+        }
+
+        .icon-dot {
+            position: absolute;
+
+            top: 6px;
+            right: 7px;
+
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #ff4d6d;
+            box-shadow: 0 0 6px #ff4d6d;
+        }
+
+        /* ================================
+           PROFILE
+        ================================= */
+
+        .avatar-chip {
+            display: flex;
+            align-items: center;
+
+            gap: .6rem;
+
+            padding: .3rem .5rem .3rem .3rem;
+
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .avatar-chip:hover {
+            background: rgba(255, 255, 255, .04);
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+
+            border-radius: 50%;
+
+            background: linear-gradient(
+                135deg,
+                var(--cyan),
+                var(--blue)
+            );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 700;
+            color: #031018;
+
+            overflow: hidden;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        #topAvatarImage {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: none;
+        }
+
+        .avatar-name {
+            font-size: .85rem;
+            font-weight: 600;
+            line-height: 1.1;
+        }
+
+        .avatar-role {
+            font-size: .72rem;
+            color: var(--muted);
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        .user-dropdown {
+            background: #0a1a2b;
+
+            border: 1px solid var(--line);
+            border-radius: 12px;
+
+            padding: .5rem;
+
+            min-width: 230px;
+            margin-top: .6rem;
+        }
+
+        .user-dropdown-header {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+
+            padding: .5rem .6rem .7rem;
+        }
+
+        .user-dropdown-email {
+            font-size: .76rem;
+            color: var(--muted);
+        }
+
+        .user-dropdown .dropdown-item {
+            color: #eaf6f9;
+
+            font-size: .85rem;
+
+            border-radius: 8px;
+
+            padding: .5rem .6rem;
+        }
+
+        .user-dropdown .dropdown-item:hover {
+            background: rgba(55, 240, 216, .08);
+            color: var(--cyan);
+        }
+
+        .user-dropdown .dropdown-divider {
+            border-color: var(--line);
+        }
+
+        .profile-link {
+            color: #fff !important;
+        }
+
+        .profile-link:hover {
+            color: var(--cyan) !important;
+        }
+
+        /* ================================
+           CONTENT
+        ================================= */
+
+        .content {
+            padding: 1.8rem 1.6rem 3rem;
+        }
+
+        .page-title {
+            font-weight: 800;
+            font-size: 1.7rem;
+            margin-bottom: .15rem;
+        }
+
+        .page-title .accent {
+            color: var(--cyan);
+        }
+
+        .page-sub {
+            color: var(--muted);
+            font-size: .92rem;
+            margin-bottom: 1.6rem;
+        }
+
+        /* ================================
+           PANELS
+        ================================= */
+
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+        }
+
+        /* ================================
+           STAT CARDS
+        ================================= */
+
+        .stat-card {
+            padding: 1.3rem 1.4rem;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: .9rem;
+        }
+
+        .stat-top {
+            display: flex;
+            align-items: center;
+            gap: .8rem;
+        }
+
+        .stat-icon {
+            width: 46px;
+            height: 46px;
+
+            border-radius: 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 1.25rem;
+
+            flex-shrink: 0;
+        }
+
+        .stat-icon.blue {
+            background: rgba(47, 143, 224, .15);
+            color: #5eb3ff;
+        }
+
+        .stat-icon.amber {
+            background: rgba(240, 180, 55, .15);
+            color: #f0b437;
+        }
+
+        .stat-icon.teal {
+            background: rgba(55, 240, 216, .15);
+            color: var(--cyan);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: .85rem;
+        }
+
+        .stat-value {
+            font-weight: 800;
+            font-size: 1.7rem;
+            line-height: 1.1;
+        }
+
+        .stat-change {
+            font-size: .8rem;
+            font-weight: 600;
+        }
+
+        .stat-change.up {
+            color: #37f08a;
+        }
+
+        /* ================================
+           QUOTE
+        ================================= */
+
+        .quote-card {
+            position: relative;
+
+            border-radius: 16px;
+            overflow: hidden;
+
+            border: 1px solid var(--line);
+
+            min-height: 100%;
+
+            display: flex;
+            align-items: flex-end;
+
+            padding: 1.4rem;
+
+            background-size: cover;
+            background-position: center;
+        }
+
+        .quote-card::before {
+            content: "";
+
+            position: absolute;
+            inset: 0;
+
+            background: linear-gradient(
+                180deg,
+                rgba(4, 13, 23, .15),
+                rgba(4, 13, 23, .85)
+            );
+        }
+
+        .quote-card blockquote {
+            position: relative;
+
+            font-style: italic;
+            font-weight: 600;
+
+            font-size: 1.05rem;
+            line-height: 1.35;
+
+            margin-bottom: .6rem;
+        }
+
+        .quote-card cite {
+            position: relative;
+
+            color: var(--cyan);
+
+            font-size: .82rem;
+            font-style: normal;
+        }
+
+        /* ================================
+           HEALTH
+        ================================= */
+
+        .health-ring-wrap {
+            position: relative;
+
+            width: 100px;
+            height: 100px;
+
+            flex-shrink: 0;
+        }
+
+        .health-ring-wrap svg {
+            width: 100%;
+            height: 100%;
+
+            transform: rotate(-90deg);
+        }
+
+        .health-ring-wrap circle.bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, .06);
+            stroke-width: 8;
+        }
+
+        .health-ring-wrap circle.fg {
+            fill: none;
+
+            stroke: var(--cyan);
+
+            stroke-width: 8;
+
+            stroke-linecap: round;
+
+            transition: stroke-dashoffset .5s ease;
+        }
+
+        .health-ring-pct {
+            position: absolute;
+            inset: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .health-dot {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #37f08a;
+            box-shadow: 0 0 6px #37f08a;
+
+            display: inline-block;
+        }
+
+        /* ================================
+           QUICK ACTIONS
+        ================================= */
+
+        .action-card {
+            border: 1px solid var(--line);
+
+            border-radius: 14px;
+
+            padding: 1.1rem;
+
+            text-align: center;
+
+            background: rgba(255, 255, 255, .015);
+
+            text-decoration: none;
+            color: #eaf6f9;
+
+            display: block;
+
+            transition: .15s;
+        }
+
+        .action-card:hover {
+            border-color: var(--cyan);
+
+            background: rgba(55, 240, 216, .05);
+
+            color: #eaf6f9;
+        }
+
+        .action-icon {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 11px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 1.15rem;
+
+            margin: 0 auto .6rem;
+        }
+
+        .action-icon.blue {
+            background: #2f8fe0;
+        }
+
+        .action-icon.purple {
+            background: #7c5cf0;
+        }
+
+        .action-icon.teal {
+            background: #1fbf9f;
+        }
+
+        .action-icon.navy {
+            background: #3b6fd6;
+        }
+
+        .action-title {
+            font-weight: 700;
+            font-size: .87rem;
+        }
+
+        .action-sub {
+            font-size: .74rem;
+            color: var(--muted);
+        }
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        .menu-toggle {
+            display: none;
+        }
+
+        .sidebar-backdrop {
+            display: none;
+        }
+
+        @media (max-width: 991.98px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: .25s ease;
+
+                box-shadow: 0 0 40px rgba(0, 0, 0, .5);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-wrap {
+                margin-left: 0;
+            }
+
+            .sidebar-backdrop {
+                display: none;
+
+                position: fixed;
+                inset: 0;
+
+                background: rgba(0, 0, 0, .5);
+
+                z-index: 1040;
+            }
+
+            .sidebar-backdrop.show {
+                display: block;
+            }
+
+            .menu-toggle {
+                display: flex !important;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+
+            .search-box {
+                display: none;
+            }
+
+            .avatar-name,
+            .avatar-role {
+                display: none;
+            }
+
+            .content {
+                padding: 1.4rem 1rem 2.5rem;
+            }
+
+            .page-title {
+                font-size: 1.4rem;
+            }
+
+            .quote-card {
+                min-height: 160px;
+                margin-top: 1rem;
+            }
+        }
+
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- SIDEBAR BACKDROP -->
+
+    <div
+        class="sidebar-backdrop"
+        id="sidebarBackdrop">
+    </div>
+
+
+    <!-- SIDEBAR -->
+
+    <aside
+        class="sidebar"
+        id="sidebar">
+
+        <div class="d-flex align-items-center gap-2 mb-4 px-1">
+
+            <div class="brand-mark">
+
+                <img
+                    class="brand-logo"
+                    src="{{ url_for('static', filename='campus logo.png') }}"
+                    alt="Campus Care Logo"
+                >
+
+            </div>
+
+            <span class="brand-text">
+                Campus
+                <span class="care">Care</span>
+            </span>
+
+        </div>
+
+
+        <nav class="flex-grow-1">
+
+            <a
+                href="/dashboard"
+                class="nav-link-custom active"
+            >
+                <i class="bi bi-grid-1x2-fill"></i>
+                Dashboard
+            </a>
+
+
+            <a
+                href="/report-issue"
+                class="nav-link-custom"
+            >
+                <i class="bi bi-plus-circle"></i>
+                Report Issue
+            </a>
+
+
+            <a
+                href="/Myreports.html"
+                class="nav-link-custom"
+            >
+                <i class="bi bi-file-earmark-text"></i>
+                My Reports
+            </a>
+
+
+            <a
+                href="/track.html"
+                class="nav-link-custom"
+            >
+                <i class="bi bi-broadcast"></i>
+                Track Status
+            </a>
+
+
+            <a
+                href="/analytics.html"
+                class="nav-link-custom"
+            >
+                <i class="bi bi-bar-chart-line"></i>
+                Analytics
+            </a>
+
+
+            <a
+                href="/notifications"
+                class="nav-link-custom"
+            >
+                <i class="bi bi-bell"></i>
+                Notifications
+
+                <span class="nav-badge">
+                    3
+                </span>
+            </a>
+
+
+            <a
+                href="/settings"
+                class="nav-link-custom"
+            >
+                <i class="bi bi-gear"></i>
+                Settings
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-promo">
+
+            <div class="promo-icon">
+                <i class="bi bi-mortarboard-fill"></i>
+            </div>
+
+            <h6>
+                Better Campus<br>
+                Better Tomorrow
+            </h6>
+
+            <p>
+                Together we build a safer,
+                cleaner and smarter campus.
+            </p>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <div class="main-wrap">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <button
+                class="icon-btn menu-toggle"
+                id="menuToggle"
+                type="button"
+            >
+                <i class="bi bi-list fs-4"></i>
+            </button>
+
+
+            <div class="search-box">
+
+                <i class="bi bi-search"></i>
+
+                <input
+                    type="text"
+                    placeholder="Search reports, issues, or anything..."
+                >
+
+            </div>
+
+
+            <div class="ms-auto d-flex align-items-center gap-2">
+
+
+                <!-- NOTIFICATIONS -->
+
+                <a
+                    href="/notifications"
+                    class="icon-btn"
+                    title="Notifications"
+                >
+
+                    <i class="bi bi-bell fs-5"></i>
+
+                    <span class="icon-dot"></span>
+
+                </a>
+
+
+                <div
+                    class="vr mx-1"
+                    style="
+                        border-color:var(--line);
+                        opacity:1;
+                    "
+                ></div>
+
+
+                <!-- PROFILE -->
+
+                <div class="dropdown">
+
+                    <div
+                        class="avatar-chip dropdown-toggle"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+
+                        <div
+                            class="avatar-circle"
+                            id="topAvatarInitials">
+
+                            <span id="topAvatarText">
+                                U
+                            </span>
+
+                            <img
+                                id="topAvatarImage"
+                                src=""
+                                alt="Profile Photo">
+                        </div>
+
+
+                        <div>
+
+                            <div
+                                class="avatar-name"
+                                id="profileName"
+                            >
+                                User
+                            </div>
+
+
+                            <div
+                                class="avatar-role"
+                                id="profileRole"
+                            >
+                                Student
+                            </div>
+
+                        </div>
+
+
+                        <i class="bi bi-chevron-down small text-secondary"></i>
+
+                    </div>
+
+
+                    <ul class="dropdown-menu dropdown-menu-end user-dropdown">
+
+                        <li class="user-dropdown-header">
+
+                            <div
+                                class="avatar-circle"
+                                id="avatarInitials"
+                            >
+                                U
+                            </div>
+
+
+                            <div>
+
+                                <div
+                                    class="fw-semibold"
+                                    id="dropdownName"
+                                >
+                                    User
+                                </div>
+
+
+                                <div
+                                    class="user-dropdown-email"
+                                    id="profileEmail"
+                                >
+                                    Email
+                                </div>
+
+                            </div>
+
+                        </li>
+
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+
+                        <li>
+
+                            <a
+                                href="/profile"
+                                class="nav-link-custom profile-link"
+                            >
+                                <i class="bi bi-person-circle"></i>
+                                My Profile
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a
+                                href="settings.html"
+                                class="dropdown-item"
+                            >
+                                <i class="bi bi-gear me-2"></i>
+                                Settings
+                            </a>
+
+                        </li>
+
+
+                        <li>
+
+                            <a
+                                href="#"
+                                class="dropdown-item"
+                            >
+                                <i class="bi bi-question-circle me-2"></i>
+                                Help &amp; Support
+                            </a>
+
+                        </li>
+
+
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+
+                        <li>
+
+                            <a
+                                href="/"
+                                class="dropdown-item text-danger"
+                                id="signOutBtn"
+                            >
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Sign Out
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+
+            <!-- GREETING -->
+
+            <h1 class="page-title">
+
+                <span id="greetingText">
+                    Good Morning,
+                </span>
+
+                <span
+                    class="accent"
+                    id="greetingName"
+                >
+                    User
+                </span>
+
+                👋
+
+            </h1>
+
+
+            <p class="page-sub">
+                Here's what's happening on your campus today.
+            </p>
+
+
+            <!-- STAT CARDS -->
+
+            <div class="row g-4 mb-4">
+
+
+                <!-- TOTAL ISSUES -->
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="panel stat-card h-100">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon blue">
+                                <i class="bi bi-file-earmark-text-fill"></i>
+                            </div>
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Total Issues
+                                </div>
+
+                                <div
+                                    class="stat-value"
+                                    id="totalIssues"
+                                >
+                                    0
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-change up">
+
+                            <i class="bi bi-database"></i>
+
+                            Live data
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PENDING -->
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="panel stat-card h-100">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon amber">
+                                <i class="bi bi-hourglass-split"></i>
+                            </div>
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Pending Reports
+                                </div>
+
+                                <div
+                                    class="stat-value"
+                                    id="pendingReports"
+                                >
+                                    0
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="stat-change"
+                            style="color:#f0b437;"
+                        >
+
+                            <i class="bi bi-clock"></i>
+
+                            Awaiting action
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESOLVED -->
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div class="panel stat-card h-100">
+
+                        <div class="stat-top">
+
+                            <div class="stat-icon teal">
+                                <i class="bi bi-check-circle-fill"></i>
+                            </div>
+
+                            <div>
+
+                                <div class="stat-label">
+                                    Resolved Issues
+                                </div>
+
+                                <div
+                                    class="stat-value"
+                                    id="resolvedIssues"
+                                >
+                                    0
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-change up">
+
+                            <i class="bi bi-check-lg"></i>
+
+                            Completed
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUOTE -->
+
+                <div class="col-sm-6 col-xl-3">
+
+                    <div
+                        class="quote-card h-100"
+                        style="
+                            background-image:url(
+                                'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop'
+                            );
+                        "
+                    >
+
+                        <div>
+
+                            <blockquote>
+                                &ldquo;A cleaner campus
+                                is a healthier campus.&rdquo;
+                            </blockquote>
+
+                            <cite>
+                                &mdash; Campus Care
+                            </cite>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RECENT ACTIVITIES -->
+
+            <div class="row g-4 mb-4">
+
+                <div class="col-12">
+
+                    <div class="panel p-4 h-100">
+
+                        <div
+                            class="
+                                d-flex
+                                align-items-center
+                                justify-content-between
+                                mb-2
+                            "
+                        >
+
+                            <div
+                                class="
+                                    d-flex
+                                    align-items-center
+                                    gap-2
+                                "
+                            >
+
+                                <i
+                                    class="bi bi-clock-history"
+                                    style="color:var(--cyan);"
+                                ></i>
+
+                                <h5 class="fw-bold mb-0">
+                                    Recent Activities
+                                </h5>
+
+                            </div>
+
+
+                            <a
+                                href="/Myreports.html"
+                                style="
+                                    font-size:.82rem;
+                                    color:var(--cyan);
+                                    text-decoration:none;
+                                "
+                            >
+                                View All
+                                <i class="bi bi-arrow-right"></i>
+                            </a>
+
+                        </div>
+
+
+                        <div
+                            id="recentActivities"
+                            class="row"
+                        >
+
+                            <div class="col-12">
+
+                                <div
+                                    class="text-center py-4"
+                                    style="color:var(--muted);"
+                                >
+                                    Loading activities...
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HEALTH + QUICK ACTIONS -->
+
+            <div class="row g-4">
+
+
+                <!-- HEALTH -->
+
+                <div class="col-xl-4">
+
+                    <div
+                        class="
+                            panel
+                            p-4
+                            h-100
+                            d-flex
+                            align-items-center
+                            gap-3
+                            flex-wrap
+                        "
+                    >
+
+                        <div class="health-ring-wrap">
+
+                            <svg viewBox="0 0 100 100">
+
+                                <circle
+                                    class="bg"
+                                    cx="50"
+                                    cy="50"
+                                    r="42"
+                                ></circle>
+
+                                <circle
+                                    class="fg"
+                                    cx="50"
+                                    cy="50"
+                                    r="42"
+                                    stroke-dasharray="264"
+                                    stroke-dashoffset="264"
+                                    id="healthCircle"
+                                ></circle>
+
+                            </svg>
+
+
+                            <div
+                                class="health-ring-pct"
+                                id="healthPercentage"
+                            >
+                                0%
+                            </div>
+
+                        </div>
+
+
+                        <div class="flex-grow-1">
+
+                            <div
+                                style="
+                                    color:var(--muted);
+                                    font-size:.85rem;
+                                "
+                            >
+                                Campus Health Status
+                            </div>
+
+
+                            <div
+                                class="fw-bold fs-5 mb-1"
+                                id="healthStatus"
+                            >
+
+                                <span class="health-dot"></span>
+
+                                Loading...
+
+                            </div>
+
+
+                            <div
+                                style="
+                                    color:var(--muted);
+                                    font-size:.82rem;
+                                "
+                                id="healthMessage"
+                            >
+                                Checking campus reports...
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="/analytics.html"
+                            class="icon-btn"
+                            style="border:1px solid var(--line);"
+                        >
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="col-xl-8">
+
+                    <div class="row g-3">
+
+
+                        <div class="col-6 col-md-3">
+
+                            <a
+                                href="/report-issue"
+                                class="action-card"
+                            >
+
+                                <div class="action-icon blue">
+                                    <i class="bi bi-plus-lg text-white"></i>
+                                </div>
+
+                                <div class="action-title">
+                                    Report an Issue
+                                </div>
+
+                                <div class="action-sub">
+                                    Let us know
+                                </div>
+
+                            </a>
+
+                        </div>
+
+
+                        <div class="col-6 col-md-3">
+
+                            <a
+                                href="/Myreports.html"
+                                class="action-card"
+                            >
+
+                                <div class="action-icon purple">
+                                    <i class="bi bi-file-earmark-text text-white"></i>
+                                </div>
+
+                                <div class="action-title">
+                                    View My Reports
+                                </div>
+
+                                <div class="action-sub">
+                                    Check your submissions
+                                </div>
+
+                            </a>
+
+                        </div>
+
+
+                        <div class="col-6 col-md-3">
+
+                            <a
+                                href="/track.html"
+                                class="action-card"
+                            >
+
+                                <div class="action-icon teal">
+                                    <i class="bi bi-geo-alt text-white"></i>
+                                </div>
+
+                                <div class="action-title">
+                                    Track Status
+                                </div>
+
+                                <div class="action-sub">
+                                    Live updates
+                                </div>
+
+                            </a>
+
+                        </div>
+
+
+                        <div class="col-6 col-md-3">
+
+                            <a
+                                href="/analytics.html"
+                                class="action-card"
+                            >
+
+                                <div class="action-icon navy">
+                                    <i class="bi bi-bar-chart text-white"></i>
+                                </div>
+
+                                <div class="action-title">
+                                    View Analytics
+                                </div>
+
+                                <div class="action-sub">
+                                    Insights &amp; trends
+                                </div>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- BOOTSTRAP JS -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <!-- ==========================================
+         DASHBOARD JAVASCRIPT
+    =========================================== -->
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            console.log("Campus Care Dashboard loaded.");
+
+            /* ================================
+               GET USER
+            ================================= */
+
+            const savedUser =
+                localStorage.getItem("campuscare_user");
+
+            let currentUser = null;
+
+            if (savedUser) {
+
+                try {
+
+                    currentUser = JSON.parse(savedUser);
+
+                } catch (error) {
+
+                    console.error(
+                        "Invalid user data:",
+                        error
+                    );
+
+                    localStorage.removeItem(
+                        "campuscare_user"
+                    );
+                }
+            }
+
+
+            /* ================================
+               USER INFORMATION
+            ================================= */
+
+            if (currentUser) {
+
+                const userName =
+                    currentUser.name ||
+                    currentUser.full_name ||
+                    "User";
+
+                const userEmail =
+                    currentUser.email ||
+                    "Email";
+
+                const department =
+                    currentUser.department ||
+                    "Student";
+
+                const year =
+                    currentUser.year ||
+                    "";
+
+
+                const profileName =
+                    document.getElementById("profileName");
+
+                const dropdownName =
+                    document.getElementById("dropdownName");
+
+                const profileEmail =
+                    document.getElementById("profileEmail");
+
+                const profileRole =
+                    document.getElementById("profileRole");
+
+
+                if (profileName) {
+                    profileName.textContent = userName;
+                }
+
+                if (dropdownName) {
+                    dropdownName.textContent = userName;
+                }
+
+                if (profileEmail) {
+                    profileEmail.textContent = userEmail;
+                }
+
+                if (profileRole) {
+                    profileRole.textContent =
+                        department +
+                        (year ? " • " + year : "");
+                }
+
+
+                /* ================================
+                   INITIALS
+                ================================= */
+
+                const initials =
+                    userName
+                        .trim()
+                        .split(/\s+/)
+                        .map(function (word) {
+                            return word.charAt(0);
+                        })
+                        .join("")
+                        .substring(0, 2)
+                        .toUpperCase();
+
+
+                const avatarInitials =
+                    document.getElementById("avatarInitials");
+
+
+                if (avatarInitials) {
+
+                    avatarInitials.textContent =
+                        initials || "U";
+                }
+
+
+                /* ================================
+                   GREETING
+                ================================= */
+
+                updateGreeting(userName);
+
+            } else {
+
+                updateGreeting("User");
+
+            }
+
+
+            /* ================================
+               MOBILE SIDEBAR
+            ================================= */
+
+            const sidebar =
+                document.getElementById("sidebar");
+
+            const backdrop =
+                document.getElementById("sidebarBackdrop");
+
+            const menuToggle =
+                document.getElementById("menuToggle");
+
+
+            if (
+                menuToggle &&
+                sidebar &&
+                backdrop
+            ) {
+
+                menuToggle.addEventListener(
+                    "click",
+                    function () {
+
+                        sidebar.classList.add("open");
+                        backdrop.classList.add("show");
+
+                    }
+                );
+            }
+
+
+            if (
+                backdrop &&
+                sidebar
+            ) {
+
+                backdrop.addEventListener(
+                    "click",
+                    function () {
+
+                        sidebar.classList.remove("open");
+                        backdrop.classList.remove("show");
+
+                    }
+                );
+            }
+
+
+            /* ================================
+               SIGN OUT
+            ================================= */
+
+            const signOutBtn =
+                document.getElementById("signOutBtn");
+
+
+            if (signOutBtn) {
+
+                signOutBtn.addEventListener(
+                    "click",
+                    function () {
+
+                        localStorage.removeItem(
+                            "campuscare_user"
+                        );
+
+                        localStorage.removeItem(
+                            "campuscare_profile_photo"
+                        );
+
+                    }
+                );
+            }
+
+
+            /* ================================
+               PROFILE PHOTO
+            ================================= */
+
+            loadProfilePhoto();
+
+
+            /* ================================
+               DASHBOARD DATA
+            ================================= */
+
+            loadDashboardData();
+
+
+            /* ================================
+               RECENT ACTIVITIES
+            ================================= */
+
+            loadRecentActivities();
+
+        });
+
+
+        /* =====================================
+           GREETING
+        ===================================== */
+
+        function updateGreeting(userName) {
+
+            const greetingText =
+                document.getElementById("greetingText");
+
+            const greetingName =
+                document.getElementById("greetingName");
+
+
+            if (
+                !greetingText ||
+                !greetingName
+            ) {
+                return;
+            }
+
+
+            const hour =
+                new Date().getHours();
+
+
+            let greeting =
+                "Good Morning,";
+
+
+            if (
+                hour >= 12 &&
+                hour < 17
+            ) {
+
+                greeting =
+                    "Good Afternoon,";
+
+            } else if (hour >= 17) {
+
+                greeting =
+                    "Good Evening,";
+            }
+
+
+            greetingText.textContent =
+                greeting;
+
+            greetingName.textContent =
+                userName || "User";
+        }
+
+
+        /* =====================================
+           LOAD PROFILE PHOTO
+        ===================================== */
+
+      function loadProfilePhoto() {
+
+    const savedPhoto =
+        localStorage.getItem("campuscare_profile_photo");
+
+    const savedUser =
+        localStorage.getItem("campuscare_user");
+
+    let user = null;
+
+    if (savedUser) {
+        try {
+            user = JSON.parse(savedUser);
+        } catch (error) {
+            console.error("Invalid user data:", error);
+        }
+    }
+
+    const topAvatarImage =
+        document.getElementById("topAvatarImage");
+
+    const topAvatarText =
+        document.getElementById("topAvatarText");
+
+    const dropdownAvatar =
+        document.getElementById("avatarInitials");
+
+
+    /* ================================
+       GET USER INITIALS
+    ================================= */
+
+    const userName =
+        user?.name ||
+        user?.full_name ||
+        "User";
+
+    const initials =
+        userName
+            .trim()
+            .split(/\s+/)
+            .map(function (word) {
+                return word.charAt(0);
+            })
+            .join("")
+            .substring(0, 2)
+            .toUpperCase();
+
+
+    /* ================================
+       TOP AVATAR
+    ================================= */
+
+    if (savedPhoto && topAvatarImage) {
+
+        // Show profile photo
+        topAvatarImage.src = savedPhoto;
+        topAvatarImage.style.display = "block";
+
+        // Hide initials
+        if (topAvatarText) {
+            topAvatarText.textContent = "";
+            topAvatarText.style.display = "none";
+        }
+
+    } else {
+
+        // Hide photo
+        if (topAvatarImage) {
+            topAvatarImage.src = "";
+            topAvatarImage.style.display = "none";
+        }
+
+        // Show initials
+        if (topAvatarText) {
+            topAvatarText.textContent =
+                initials || "U";
+
+            topAvatarText.style.display =
+                "block";
+        }
+    }
+
+
+    /* ================================
+       DROPDOWN AVATAR
+    ================================= */
+
+    if (dropdownAvatar) {
+
+        if (savedPhoto) {
+
+            dropdownAvatar.innerHTML = "";
+
+            const image =
+                document.createElement("img");
+
+            image.src = savedPhoto;
+            image.alt = "Profile Photo";
+
+            image.style.width = "100%";
+            image.style.height = "100%";
+            image.style.objectFit = "cover";
+            image.style.borderRadius = "50%";
+
+            dropdownAvatar.appendChild(image);
+
+        } else {
+
+            // Show initials
+            dropdownAvatar.innerHTML =
+                initials || "U";
+        }
+    }
+}
+
+            const savedPhoto =
+                localStorage.getItem(
+                    "campuscare_profile_photo"
+                );
+
+
+            const topAvatarImage =
+                document.getElementById(
+                    "topAvatarImage"
+                );
+
+
+            const topAvatarText =
+                document.getElementById(
+                    "topAvatarText"
+                );
+
+
+            const dropdownAvatar =
+                document.getElementById(
+                    "avatarInitials"
+                );
+
+
+            if (
+                savedPhoto &&
+                topAvatarImage
+            ) {
+
+                topAvatarImage.src =
+                    savedPhoto;
+
+                topAvatarImage.style.display =
+                    "block";
+
+
+                if (topAvatarText) {
+
+                    topAvatarText.style.display =
+                        "none";
+                }
+            }
+
+
+            if (
+                savedPhoto &&
+                dropdownAvatar
+            ) {
+
+                dropdownAvatar.innerHTML = "";
+
+
+                const image =
+                    document.createElement("img");
+
+
+                image.src =
+                    savedPhoto;
+
+                image.alt =
+                    "Profile Photo";
+
+
+                dropdownAvatar.appendChild(
+                    image
+                );
+            }
+        
+
+
+        /* =====================================
+           DASHBOARD STATISTICS
+        ===================================== */
+
+        async function loadDashboardData() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/analytics-data",
+                        {
+                            method: "GET",
+                            cache: "no-store"
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load dashboard data."
+                    );
+                }
+
+
+                /* TOTAL */
+
+                const total =
+                    Number(data.total) || 0;
+
+
+                const totalIssues =
+                    document.getElementById(
+                        "totalIssues"
+                    );
+
+
+                if (totalIssues) {
+                    totalIssues.textContent =
+                        total;
+                }
+
+
+                /* PENDING */
+
+                const pending =
+                    Number(data.pending) || 0;
+
+
+                const pendingReports =
+                    document.getElementById(
+                        "pendingReports"
+                    );
+
+
+                if (pendingReports) {
+                    pendingReports.textContent =
+                        pending;
+                }
+
+
+                /* RESOLVED */
+
+                const resolved =
+                    Number(data.resolved) || 0;
+
+
+                const resolvedIssues =
+                    document.getElementById(
+                        "resolvedIssues"
+                    );
+
+
+                if (resolvedIssues) {
+                    resolvedIssues.textContent =
+                        resolved;
+                }
+
+
+                /* HEALTH */
+
+                let health =
+                    total > 0
+                        ? Math.round(
+                            (resolved / total) * 100
+                        )
+                        : 100;
+
+
+                health =
+                    Math.max(
+                        0,
+                        Math.min(
+                            100,
+                            health
+                        )
+                    );
+
+
+                const healthPercentage =
+                    document.getElementById(
+                        "healthPercentage"
+                    );
+
+
+                if (healthPercentage) {
+
+                    healthPercentage.textContent =
+                        health + "%";
+                }
+
+
+                const circumference = 264;
+
+
+                const offset =
+                    circumference -
+                    (health / 100) *
+                    circumference;
+
+
+                const healthCircle =
+                    document.getElementById(
+                        "healthCircle"
+                    );
+
+
+                if (healthCircle) {
+
+                    healthCircle.setAttribute(
+                        "stroke-dasharray",
+                        circumference
+                    );
+
+                    healthCircle.setAttribute(
+                        "stroke-dashoffset",
+                        offset
+                    );
+                }
+
+
+                const healthStatus =
+                    document.getElementById(
+                        "healthStatus"
+                    );
+
+
+                const healthMessage =
+                    document.getElementById(
+                        "healthMessage"
+                    );
+
+
+                if (
+                    healthStatus &&
+                    healthMessage
+                ) {
+
+                    if (health >= 80) {
+
+                        healthStatus.innerHTML =
+                            '<span class="health-dot"></span> Healthy';
+
+                        healthMessage.textContent =
+                            "Campus is doing well. Keep it up!";
+
+                    } else if (health >= 50) {
+
+                        healthStatus.innerHTML =
+                            '<span class="health-dot"></span> Good';
+
+                        healthMessage.textContent =
+                            "Some issues need attention.";
+
+                    } else {
+
+                        healthStatus.innerHTML =
+                            '<span class="health-dot"></span> Needs Attention';
+
+                        healthMessage.textContent =
+                            "Several reports need attention.";
+                    }
+                }
+
+
+                console.log(
+                    "Dashboard statistics loaded."
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Dashboard error:",
+                    error
+                );
+            }
+        }
+
+
+        /* =====================================
+           RECENT ACTIVITIES
+        ===================================== */
+
+        async function loadRecentActivities() {
+
+            const container =
+                document.getElementById(
+                    "recentActivities"
+                );
+
+
+            if (!container) {
+                return;
+            }
+
+
+            try {
+
+                const storedUser =
+                    localStorage.getItem(
+                        "campuscare_user"
+                    );
+
+
+                if (!storedUser) {
+
+                    container.innerHTML = `
+                        <div class="col-12">
+                            <div
+                                class="text-center py-4"
+                                style="color:var(--muted);"
+                            >
+                                Please sign in again.
+                            </div>
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                const user =
+                    JSON.parse(storedUser);
+
+
+                const studentId =
+                    user.student_id;
+
+
+                if (!studentId) {
+
+                    container.innerHTML = `
+                        <div class="col-12">
+                            <div
+                                class="text-center py-4"
+                                style="color:var(--muted);"
+                            >
+                                Student ID not found.
+                            </div>
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                const response =
+                    await fetch(
+                        `/my-reports?student_id=${encodeURIComponent(studentId)}`
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (
+                    !response.ok ||
+                    !data.success
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Failed to load reports"
+                    );
+                }
+
+
+                const reports =
+                    data.reports || [];
+
+
+                /* NO REPORTS */
+
+                if (reports.length === 0) {
+
+                    container.innerHTML = `
+                        <div class="col-12">
+
+                            <div
+                                class="text-center py-4"
+                                style="color:var(--muted);"
+                            >
+
+                                <i
+                                    class="bi bi-inbox"
+                                    style="font-size:2rem;"
+                                ></i>
+
+                                <p class="mt-2 mb-0">
+                                    No recent activities
+                                </p>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                /* LATEST 4 */
+
+                const recentReports =
+                    reports.slice(0, 4);
+
+
+                container.innerHTML =
+                    recentReports.map(
+                        function (report) {
+
+                            let statusClass =
+                                "warning";
+
+
+                            if (
+                                report.status ===
+                                "Resolved"
+                            ) {
+
+                                statusClass =
+                                    "success";
+
+                            } else if (
+                                report.status ===
+                                "In Progress"
+                            ) {
+
+                                statusClass =
+                                    "info";
+                            }
+
+
+                            return `
+                                <div class="col-12 mb-3">
+
+                                    <div
+                                        class="p-3"
+                                        style="
+                                            background:rgba(255,255,255,.03);
+                                            border:1px solid rgba(255,255,255,.06);
+                                            border-radius:12px;
+                                        "
+                                    >
+
+                                        <div
+                                            class="
+                                                d-flex
+                                                justify-content-between
+                                                align-items-start
+                                            "
+                                        >
+
+                                            <div>
+
+                                                <div
+                                                    class="fw-semibold"
+                                                    style="color:#fff;"
+                                                >
+                                                    ${report.issue_title || "Campus Issue"}
+                                                </div>
+
+                                                <small
+                                                    style="color:var(--muted);"
+                                                >
+                                                    ${report.ticket_id || ""}
+                                                    ${
+                                                        report.location
+                                                            ? " • " + report.location
+                                                            : ""
+                                                    }
+                                                </small>
+
+                                            </div>
+
+                                            <span
+                                                class="
+                                                    badge
+                                                    text-bg-${statusClass}
+                                                "
+                                            >
+                                                ${report.status || "Pending"}
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            `;
+                        }
+                    ).join("");
+
+            } catch (error) {
+
+                console.error(
+                    "Recent activities error:",
+                    error
+                );
+
+
+                container.innerHTML = `
+                    <div class="col-12">
+
+                        <div
+                            class="text-center py-4"
+                            style="color:var(--muted);"
+                        >
+                            Unable to load recent activities.
+                        </div>
+
+                    </div>
+                `;
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
