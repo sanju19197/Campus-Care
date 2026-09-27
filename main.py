@@ -151,6 +151,7 @@ def register():
 
 @app.route("/login", methods=["POST"])
 def login():
+    print("LOGIN ROUTE REACHED", flush=True)
 
     data = request.get_json()
 
