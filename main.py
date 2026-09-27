@@ -210,7 +210,7 @@ def login():
 
         return jsonify({
             "success": False,
-            "message": "Database connection error."
+            "message": f"Database connection error: {str(e)}"
         }), 500
 
 @app.route("/report", methods=["POST"])
