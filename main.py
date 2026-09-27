@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+
 from flask import Flask, request, jsonify, render_template
 import mysql.connector
 from mysql.connector import Error
