@@ -38,6 +38,11 @@
     display:flex;flex-direction:column;
   }
   .brand-mark{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--cyan),var(--blue));display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#031018;overflow:hidden;flex-shrink:0;}
+  .brand-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
   .brand-text{font-weight:700;font-size:1.1rem;}
   .brand-text .care{color:var(--cyan);}
   .nav-link-custom{
@@ -177,10 +182,12 @@
  
 <!-- SIDEBAR -->
 <aside class="sidebar" id="sidebar">
-  <div class="d-flex align-items-center gap-2 mb-4 px-1">
-    <div class="brand-mark"><i class="bi bi-shield-fill-check"></i></div>
+ <div class="d-flex align-items-center gap-2 mb-4 px-1">
+    <div class="brand-mark">
+        <img src="{{ url_for('static', filename='campus logo.png') }}" alt="Campus Care Logo">
+    </div>
     <span class="brand-text">Campus <span class="care">Care</span></span>
-  </div>
+</div>
  
   <nav class="flex-grow-1">
     <a href="/dashboard" class="nav-link-custom">

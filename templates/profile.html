@@ -1158,24 +1158,25 @@ select.field-input:valid + .field-label{
 
                     <form id="securityForm">
 
-                        <div class="field-group">
+                       <div class="field-group">
+    <input
+        type="password"
+        class="field-input"
+        id="currentPassword"
+        placeholder=" "
+        required
+    >
 
-                            <input
-                                type="password"
-                                class="field-input"
-                                id="currentPassword"
-                                placeholder=" "
-                                required
-                            >
+    <label for="currentPassword" class="field-label">
+        Current Password
+    </label>
 
-                            <label
-                                for="currentPassword"
-                                class="field-label"
-                            >
-                                Current Password
-                            </label>
-
-                        </div>
+    <div class="text-end mt-2">
+        <a href="/forgot-password" class="forgot-link">
+            Forgot Password?
+        </a>
+    </div>
+</div>
 
 
                         <div class="field-group">

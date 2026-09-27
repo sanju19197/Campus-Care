@@ -1,4 +1,5 @@
 import os
+import smtplib
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -301,6 +302,105 @@ def create_report():
 @app.route("/")
 def home():
     return render_template("campuslogin.html")
+def send_reset_email(to_email, reset_link):
+    sender_email = os.getenv("GMAIL_EMAIL")
+    app_password = os.getenv("GMAIL_APP_PASSWORD")
+
+    subject = "Campus Care - Password Reset"
+
+    body = f"""
+Hello,
+
+We received a request to reset your Campus Care password.
+
+Click the link below to reset your password:
+
+{reset_link}
+
+If you did not request this, you can ignore this email.
+
+Regards,
+Campus Care Team
+"""
+
+    message = f"""Subject: {subject}
+From: {sender_email}
+To: {to_email}
+
+{body}
+"""
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(sender_email, app_password)
+        server.sendmail(sender_email, to_email, message)
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+
+    if request.method == "POST":
+
+        data = request.get_json() or {}
+
+        identifier = data.get("identifier", "").strip()
+
+        if not identifier:
+            return jsonify({
+                "success": False,
+                "message": "Please enter your email or student ID."
+            }), 400
+
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor(dictionary=True)
+
+            cursor.execute("""
+                SELECT id, email, student_id
+                FROM users
+                WHERE email = %s OR student_id = %s
+                LIMIT 1
+            """, (identifier, identifier))
+
+            user = cursor.fetchone()
+
+            cursor.close()
+            conn.close()
+
+            if not user:
+                return jsonify({
+                    "success": False,
+                    "message": "No account found with this email or student ID."
+                }), 404
+
+            reset_link = "http://127.0.0.1:5000/reset-password"
+
+            try:
+                send_reset_email(
+                    user["email"],
+                    reset_link
+                )
+
+                return jsonify({
+                    "success": True,
+                    "message": "Password reset email sent."
+                })
+
+            except Exception as e:
+                print("Email sending error:", repr(e), flush=True)
+
+                return jsonify({
+                    "success": False,
+                    "message": "Unable to send password reset email."
+                }), 500
+
+        except Error as e:
+            print("Forgot password error:", e, flush=True)
+
+            return jsonify({
+                "success": False,
+                "message": "Unable to process password reset."
+            }), 500
+
+    return render_template("Forgotpassword.html")
 
 # =========================
 # DASHBOARD
@@ -995,7 +1095,7 @@ if __name__ == "__main__":
     create_users_table()
 
     app.run(
-        host="127.0.0.1",
+        host="0.0.0.0",
         port=5000,
         debug=True
     )

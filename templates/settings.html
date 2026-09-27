@@ -76,7 +76,11 @@
             color: #071019;
             font-size: 21px;
         }
-
+  .brand-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
         .brand-text {
             font-family: "Space Grotesk", sans-serif;
             font-weight: 700;
@@ -450,15 +454,15 @@
 <aside class="sidebar">
 
     <div class="brand">
-        <div class="brand-icon">
-            <i class="bi bi-buildings"></i>
-        </div>
-
-        <div class="brand-text">
-            Campus Care
-            <span>REPORT. TRACK. RESOLVE.</span>
-        </div>
+    <div class="brand-icon">
+        <img src="{{ url_for('static', filename='campus logo.png') }}" alt="Campus Care Logo">
     </div>
+
+    <div class="brand-text">
+        Campus Care
+        <span>REPORT. TRACK. RESOLVE.</span>
+    </div>
+</div>
 
     <div class="nav-title">Main Menu</div>
 
