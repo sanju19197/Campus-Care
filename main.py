@@ -205,7 +205,7 @@ def login():
         })
 
     except Error as e:
-        print("Database error:", e)
+        print("LOGIN DATABASE ERROR:", repr(e), flush=True)
 
         return jsonify({
             "success": False,
