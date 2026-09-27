@@ -1,3 +1,7 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 from flask import Flask, request, jsonify, render_template
 import mysql.connector
 from mysql.connector import Error
@@ -11,14 +15,23 @@ app = Flask(__name__)
 # =========================
 
 def get_db_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        port=3306,
-        user="root",
-        password="24FF1A0514",
-        database="CampusCare"
-    )
+    db_ssl_ca = os.getenv("DB_SSL_CA")
 
+    if db_ssl_ca and not os.path.isabs(db_ssl_ca):
+        db_ssl_ca = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            db_ssl_ca
+        )
+
+    return mysql.connector.connect(
+        host=os.getenv("DB_HOST"),
+        port=int(os.getenv("DB_PORT", 3306)),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME"),
+        ssl_ca=db_ssl_ca,
+        ssl_verify_cert=True
+    )
 
 # =========================
 # CREATE USERS TABLE
